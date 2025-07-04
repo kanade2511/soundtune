@@ -1,6 +1,6 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import ArticleCard from '@/components/ArticleCard'
+import Card from '@/components/Card'
 import matter from 'gray-matter'
 import { ArrowLeft, Tag } from 'lucide-react'
 import Link from 'next/link'
@@ -86,7 +86,7 @@ const TagPage = async ({ params }: PageProps) => {
                 {articles.length > 0 ? (
                     <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12'>
                         {articles.map(article => (
-                            <ArticleCard
+                            <Card
                                 key={article.slug}
                                 slug={article.slug}
                                 title={article.title}

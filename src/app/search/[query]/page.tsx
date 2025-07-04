@@ -1,6 +1,6 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import ArticleCard from '@/components/ArticleCard'
+import Card from '@/components/Card'
 import matter from 'gray-matter'
 import { ArrowLeft, Search } from 'lucide-react'
 import Link from 'next/link'
@@ -110,7 +110,7 @@ const SearchPage = async ({ params }: PageProps) => {
                             const snippet = getContentSnippet(article.content, decodedQuery)
 
                             return (
-                                <ArticleCard
+                                <Card
                                     key={article.slug}
                                     slug={article.slug}
                                     title={article.title}

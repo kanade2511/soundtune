@@ -1,7 +1,8 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import TagCard from '@/components/TagCard'
 import matter from 'gray-matter'
-import { FileText, Tag } from 'lucide-react'
+import { Tag } from 'lucide-react'
 import Link from 'next/link'
 
 interface TagInfo {
@@ -63,24 +64,7 @@ const TagsPage = async () => {
                 {/* Tags */}
                 <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-12'>
                     {tags.map(tag => (
-                        <Link
-                            key={tag.slug}
-                            href={`/tag/${encodeURIComponent(tag.slug)}`}
-                            className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-4 group'
-                        >
-                            <div className='flex items-center justify-between'>
-                                <div className='flex items-center space-x-2'>
-                                    <Tag className='h-5 w-5 text-blue-600' />
-                                    <span className='font-medium text-gray-800 group-hover:text-blue-600 transition-colors'>
-                                        {tag.displayName}
-                                    </span>
-                                </div>
-                                <div className='flex items-center space-x-2'>
-                                    <span className='text-sm text-gray-500'>{tag.count}件</span>
-                                    <FileText className='h-4 w-4 text-gray-400' />
-                                </div>
-                            </div>
-                        </Link>
+                        <TagCard key={tag.slug} tag={tag.displayName} articleCount={tag.count} />
                     ))}
                 </div>
 
@@ -90,7 +74,6 @@ const TagsPage = async () => {
                         href='/'
                         className='inline-flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors font-medium'
                     >
-                        <FileText className='h-4 w-4' />
                         <span>ホームに戻る</span>
                     </Link>
                 </div>

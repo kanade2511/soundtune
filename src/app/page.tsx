@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import ArticleCard from '@/components/ArticleCard'
 import matter from 'gray-matter'
-import Link from 'next/link'
 
 interface Article {
     slug: string
@@ -9,6 +9,7 @@ interface Article {
     category: string
     description: string
     readTime: string
+    date: string
     tags: string[]
 }
 
@@ -32,6 +33,7 @@ const getArticles = async (): Promise<Article[]> => {
             category: data.category || '一般',
             description: data.description || '説明文',
             readTime: data.readTime || '5分',
+            date: data.date || '2025-07-04',
             tags: data.tags || [],
         })
     }
@@ -57,46 +59,18 @@ const Home = async () => {
 
                 {/* Blog Posts */}
                 <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
-                    {articles.map(article => {
-                        return (
-                            <Link
-                                key={article.slug}
-                                href={`/notes/${article.slug}`}
-                                className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 block group'
-                            >
-                                <div className='flex items-center justify-between mb-4'>
-                                    <div className='flex items-center'>
-                                        <span className='text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full'>
-                                            {article.category}
-                                        </span>
-                                    </div>
-                                    <span className='text-sm text-gray-500'>
-                                        {article.readTime}
-                                    </span>
-                                </div>
-                                <h3 className='text-xl font-semibold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors'>
-                                    {article.title}
-                                </h3>
-                                <p className='text-gray-600 mb-4 line-clamp-3'>
-                                    {article.description}
-                                </p>
-
-                                {/* Tags */}
-                                {article.tags.length > 0 && (
-                                    <div className='flex flex-wrap gap-2 mb-4'>
-                                        {article.tags.map(tag => (
-                                            <span
-                                                key={tag}
-                                                className='text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full'
-                                            >
-                                                #{tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                            </Link>
-                        )
-                    })}
+                    {articles.map(article => (
+                        <ArticleCard
+                            key={article.slug}
+                            slug={article.slug}
+                            title={article.title}
+                            category={article.category}
+                            description={article.description}
+                            readTime={article.readTime}
+                            date={article.date}
+                            tags={article.tags}
+                        />
+                    ))}
                 </div>
             </main>
         </div>

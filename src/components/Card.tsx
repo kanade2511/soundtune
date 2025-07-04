@@ -12,9 +12,6 @@ interface CardProps {
     date: string
     tags: string[]
     imageUrl?: string
-    showSnippet?: boolean
-    snippet?: string
-    highlightQuery?: string
 }
 
 const Card = ({
@@ -26,16 +23,7 @@ const Card = ({
     date,
     tags,
     imageUrl = 'https://picsum.photos/300/200',
-    showSnippet = false,
-    snippet,
-    highlightQuery,
 }: CardProps) => {
-    const highlightText = (text: string, query?: string): string => {
-        if (!query) return text
-        const regex = new RegExp(`(${query})`, 'gi')
-        return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>')
-    }
-
     return (
         <div className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden'>
             <Link href={`/notes/${slug}`} className='block'>
@@ -53,31 +41,13 @@ const Card = ({
                 {/* カードコンテンツ */}
                 <div className='p-4'>
                     {/* タイトル */}
-                    <h3
-                        className='text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors'
-                        dangerouslySetInnerHTML={{
-                            __html: highlightText(title, highlightQuery),
-                        }}
-                    />
+                    <h3 className='text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 transition-colors'>
+                        {title}
+                    </h3>
 
                     {/* 説明文 */}
                     {description && (
-                        <p
-                            className='text-sm text-gray-600 mb-3 line-clamp-2'
-                            dangerouslySetInnerHTML={{
-                                __html: highlightText(description, highlightQuery),
-                            }}
-                        />
-                    )}
-
-                    {/* スニペット（検索結果用） */}
-                    {showSnippet && snippet && snippet !== description && (
-                        <div
-                            className='text-sm text-gray-500 mb-3 italic line-clamp-2'
-                            dangerouslySetInnerHTML={{
-                                __html: highlightText(snippet, highlightQuery),
-                            }}
-                        />
+                        <p className='text-sm text-gray-600 mb-3 line-clamp-2'>{description}</p>
                     )}
 
                     {/* 日付と読了時間 */}

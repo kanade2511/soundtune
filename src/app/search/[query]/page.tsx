@@ -35,12 +35,8 @@ const searchArticles = async (query: string): Promise<Article[]> => {
         const category = data.category || '一般'
         const tags = data.tags || []
 
-        // 検索条件: タイトル、説明文、カテゴリ、タグ、コンテンツに検索語が含まれる
-        const searchableText = [title, description, category, ...tags, content]
-            .join(' ')
-            .toLowerCase()
-
-        if (searchableText.includes(searchTerm)) {
+        // 検索条件: タイトルのみ
+        if (title.toLowerCase().includes(searchTerm)) {
             articles.push({
                 slug,
                 title,
@@ -55,25 +51,6 @@ const searchArticles = async (query: string): Promise<Article[]> => {
     }
 
     return articles
-}
-
-const getContentSnippet = (content: string, query: string, maxLength = 200) => {
-    const lowerContent = content.toLowerCase()
-    const lowerQuery = query.toLowerCase()
-
-    const index = lowerContent.indexOf(lowerQuery)
-    if (index === -1) {
-        return content.substring(0, maxLength) + (content.length > maxLength ? '...' : '')
-    }
-
-    const start = Math.max(0, index - 50)
-    const end = Math.min(content.length, index + query.length + 150)
-
-    let snippet = content.substring(start, end)
-    if (start > 0) snippet = `...${snippet}`
-    if (end < content.length) snippet = `${snippet}...`
-
-    return snippet
 }
 
 interface PageProps {
@@ -106,25 +83,18 @@ const SearchPage = async ({ params }: PageProps) => {
                 {/* Search Results */}
                 {articles.length > 0 ? (
                     <div className='space-y-6 mb-12'>
-                        {articles.map(article => {
-                            const snippet = getContentSnippet(article.content, decodedQuery)
-
-                            return (
-                                <Card
-                                    key={article.slug}
-                                    slug={article.slug}
-                                    title={article.title}
-                                    category={article.category}
-                                    description={article.description}
-                                    readTime={article.readTime}
-                                    date={article.date}
-                                    tags={article.tags}
-                                    showSnippet={true}
-                                    snippet={snippet}
-                                    highlightQuery={decodedQuery}
-                                />
-                            )
-                        })}
+                        {articles.map(article => (
+                            <Card
+                                key={article.slug}
+                                slug={article.slug}
+                                title={article.title}
+                                category={article.category}
+                                description={article.description}
+                                readTime={article.readTime}
+                                date={article.date}
+                                tags={article.tags}
+                            />
+                        ))}
                     </div>
                 ) : (
                     <div className='text-center py-12'>

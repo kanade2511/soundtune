@@ -1,0 +1,28 @@
+{
+    "explorer.sortOrder": "type",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+        "quickfix.biome": "explicit",
+        "source.organizeImports.biome": "explicit"
+    },
+    "files.exclude": {
+        // git, package manager
+        ".gitignore": true,
+        "bun.lock": true,
+        "node_modules": true,
+        // build, deploy
+        ".next": true,
+        ".vercel": true,
+        // develop, config
+        // "biome.json": true,
+        "next-env.d.ts": true,
+        "postcss.config.*": true,
+        "components.json": true
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    }
+}

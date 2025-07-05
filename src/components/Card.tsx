@@ -1,6 +1,6 @@
 'use client'
 
-import { Calendar, Clock } from 'lucide-react'
+import { Calendar, Clock, Loader } from 'lucide-react'
 import Link from 'next/link'
 
 interface CardProps {
@@ -11,7 +11,7 @@ interface CardProps {
     readTime: string
     date: string
     tags: string[]
-    imageUrl?: string
+    thumbnail?: string
 }
 
 const Card = ({
@@ -22,19 +22,28 @@ const Card = ({
     readTime,
     date,
     tags,
-    imageUrl = 'https://picsum.photos/300/200',
+    thumbnail = 'https://picsum.photos/300/200',
 }: CardProps) => {
     return (
         <div className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden'>
             <Link href={`/notes/${slug}`} className='block'>
                 {/* 画像エリア */}
-                <div className='relative'>
-                    <img src={imageUrl} alt={title} className='w-full h-48 object-cover' />
-                    {/* カテゴリラベル */}
-                    <div className='absolute top-3 left-3'>
-                        <span className='bg-black text-white text-xs font-medium px-2 py-1 rounded'>
-                            {category}
-                        </span>
+                <div className='relative h-48'>
+                    <div className='absolute inset-0 bg-white bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px] rounded'>
+                        <div className='absolute inset-0 flex items-center justify-center'>
+                            <Loader className='h-8 w-8 text-gray-400 animate-spin' />
+                        </div>
+                        <img
+                            src={thumbnail}
+                            alt={title}
+                            className='absolute inset-0 w-full h-full object-cover z-10'
+                        />
+                        {/* カテゴリラベル */}
+                        <div className='absolute top-3 left-3 z-20'>
+                            <span className='text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full'>
+                                {category}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -75,7 +84,7 @@ const Card = ({
                                 className='text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded hover:bg-gray-200 transition-colors'
                                 onClick={e => e.stopPropagation()}
                             >
-                                #{tag}
+                                # {tag}
                             </Link>
                         ))}
                         {tags.length > 3 && (

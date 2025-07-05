@@ -49,14 +49,6 @@ const Home = async () => {
 
     return (
         <div className='min-h-screen'>
-            {/* Header */}
-            <div className='text-center mb-12'>
-                <h2 className='text-4xl font-bold text-gray-800 mb-4'>音楽ノート & 楽器ガイド</h2>
-                <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
-                    楽器の使い方や音楽機器の操作方法を分かりやすいノートで解説します
-                </p>
-            </div>
-
             {/* メインコンテンツ */}
             <div>
                 <h3 className='text-2xl font-bold text-gray-800 mb-6'>すべての記事</h3>

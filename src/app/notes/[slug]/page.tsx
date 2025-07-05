@@ -102,7 +102,7 @@ const Page = async ({ params }: PageProps) => {
                                     href={`/tag/${encodeURIComponent(tag)}`}
                                     className='text-sm bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 transition-colors'
                                 >
-                                    #{tag}
+                                    # {tag}
                                 </Link>
                             ))}
                         </div>
@@ -125,9 +125,6 @@ const Page = async ({ params }: PageProps) => {
                         <ArrowLeft className='h-4 w-4' />
                         <span>ノート一覧に戻る</span>
                     </Link>
-                    <div className='text-sm text-gray-500'>
-                        SoundTune - 音楽の世界をもっと身近に
-                    </div>
                 </div>
             </article>
         </div>

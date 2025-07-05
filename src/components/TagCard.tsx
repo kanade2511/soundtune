@@ -20,7 +20,7 @@ const TagCard = ({ tag, articleCount }: TagCardProps) => {
             </div>
 
             <h3 className='text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors'>
-                #{tag}
+                # {tag}
             </h3>
 
             <p className='text-gray-600 text-sm'>「{tag}」に関する記事を見る</p>

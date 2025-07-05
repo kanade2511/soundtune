@@ -3,7 +3,7 @@ import path from 'node:path'
 import matter from 'gray-matter'
 import { Calendar, Clock, Mail, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
-import { SidebarSearchBox } from './SidebarSearchBox'
+import { SearchBox } from './SearchBox'
 
 interface Article {
     slug: string
@@ -46,10 +46,10 @@ const Sidebar = async () => {
     const latestArticles = await getLatestArticles()
 
     return (
-        <div className='lg:col-span-1 space-y-6'>
+        <div className='space-y-6'>
             {/* 検索ボックスカード */}
-            <div className='bg-white rounded-lg shadow-md p-6'>
-                <SidebarSearchBox />
+            <div className='bg-white rounded-lg shadow-md p-6 mt-14'>
+                <SearchBox variant='sidebar' title='記事を検索' />
             </div>
 
             {/* 最新記事カード */}

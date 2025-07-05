@@ -1,5 +1,6 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import Breadcrumb from '@/components/Breadcrumb'
 import TagCard from '@/components/TagCard'
 import matter from 'gray-matter'
 import { Tag } from 'lucide-react'
@@ -45,8 +46,11 @@ const TagsPage = async () => {
     const tags = await getAllTags()
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
+        <div className='min-h-screen'>
             <div className='container mx-auto px-4 py-8 max-w-4xl'>
+                {/* Breadcrumb */}
+                <Breadcrumb items={[{ label: 'タグ一覧' }]} />
+
                 {/* Header */}
                 <div className='mb-8'>
                     <div className='flex items-center space-x-2 mb-4'>

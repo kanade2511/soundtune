@@ -54,16 +54,15 @@ const getTagDisplayName = (tagSlug: string): string => {
 }
 
 interface PageProps {
-    params: Promise<{ slug: string }>
+    params: { slug: string }
 }
 
 const TagPage = async ({ params }: PageProps) => {
-    const { slug } = await params
-    const articles = await getArticlesByTag(slug)
-    const tagDisplayName = getTagDisplayName(slug)
+    const articles = await getArticlesByTag(params.slug)
+    const tagDisplayName = getTagDisplayName(params.slug)
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
+        <div className='min-h-screen'>
             <div className='container mx-auto px-4 py-8 max-w-6xl'>
                 {/* Header */}
                 <div className='mb-8'>

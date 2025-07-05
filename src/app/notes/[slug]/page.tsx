@@ -1,7 +1,8 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import Breadcrumb from '@/components/Breadcrumb'
 import matter from 'gray-matter'
-import { ArrowLeft, Calendar, ChevronRight, Clock } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -52,24 +53,20 @@ const Page = async ({ params }: PageProps) => {
     const { content, metadata } = await getMarkdownWithMetadata(slug)
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
+        <div className='min-h-screen'>
             {/* Article */}
             <article className='container mx-auto px-4 py-8 max-w-4xl'>
                 {/* Breadcrumb */}
-                <nav className='flex items-center space-x-2 text-sm text-gray-500 mb-6'>
-                    <Link href='/' className='hover:text-blue-600 transition-colors'>
-                        ホーム
-                    </Link>
-                    <ChevronRight className='h-4 w-4' />
-                    <Link
-                        href={`/tag/${encodeURIComponent(metadata.category)}`}
-                        className='hover:text-blue-600 transition-colors'
-                    >
-                        {metadata.category}
-                    </Link>
-                    <ChevronRight className='h-4 w-4' />
-                    <span className='text-gray-700 font-medium truncate'>{metadata.title}</span>
-                </nav>
+                {/* Breadcrumb */}
+                <Breadcrumb
+                    items={[
+                        {
+                            label: metadata.category,
+                            href: `/tag/${encodeURIComponent(metadata.category)}`,
+                        },
+                        { label: metadata.title },
+                    ]}
+                />
 
                 {/* Article Header */}
                 <div className='mb-8'>

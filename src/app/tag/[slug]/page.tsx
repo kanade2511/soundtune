@@ -54,12 +54,13 @@ const getTagDisplayName = (tagSlug: string): string => {
 }
 
 interface PageProps {
-    params: { slug: string }
+    params: Promise<{ slug: string }>
 }
 
 const TagPage = async ({ params }: PageProps) => {
-    const articles = await getArticlesByTag(params.slug)
-    const tagDisplayName = getTagDisplayName(params.slug)
+    const { slug } = await params
+    const articles = await getArticlesByTag(slug)
+    const tagDisplayName = getTagDisplayName(slug)
 
     return (
         <div className='min-h-screen'>

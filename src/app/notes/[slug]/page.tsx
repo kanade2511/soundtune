@@ -15,6 +15,10 @@ interface PostMetadata {
     tags: string[]
 }
 
+interface PageProps {
+    params: Promise<{ slug: string }>
+}
+
 const getMarkdownWithMetadata = async (
     slug: string,
 ): Promise<{
@@ -43,8 +47,9 @@ const getMarkdownWithMetadata = async (
     }
 }
 
-const Page = async ({ params }: { params: { slug: string } }) => {
-    const { content, metadata } = await getMarkdownWithMetadata(params.slug)
+const Page = async ({ params }: PageProps) => {
+    const { slug } = await params
+    const { content, metadata } = await getMarkdownWithMetadata(slug)
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>

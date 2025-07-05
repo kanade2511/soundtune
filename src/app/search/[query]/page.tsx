@@ -54,11 +54,12 @@ const searchArticles = async (query: string): Promise<Article[]> => {
 }
 
 interface PageProps {
-    params: { query: string }
+    params: Promise<{ query: string }>
 }
 
 const SearchPage = async ({ params }: PageProps) => {
-    const decodedQuery = decodeURIComponent(params.query)
+    const { query } = await params
+    const decodedQuery = decodeURIComponent(query)
     const articles = await searchArticles(decodedQuery)
 
     return (

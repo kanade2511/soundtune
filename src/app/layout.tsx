@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
     title: 'SoundTune',
     // description: '',
+    icons: {
+        icon: '/logo.png',
+    },
 }
 
 const RootLayout = ({

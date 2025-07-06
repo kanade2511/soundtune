@@ -1,66 +1,13 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
 import Card from '@/components/Card'
-import matter from 'gray-matter'
+import { getArticlesByTag } from '@/lib/articles'
+import type { PageProps } from '@/lib/types'
 import { ArrowLeft, Tag } from 'lucide-react'
 import Link from 'next/link'
-
-interface Article {
-    slug: string
-    title: string
-    category: string
-    description: string
-    readTime: string
-    date: string
-    tags: string[]
-}
-
-const getArticlesByTag = async (tagSlug: string): Promise<Article[]> => {
-    const articlesDir = path.join(process.cwd(), 'src', 'notes')
-    const filenames = await fs.readdir(articlesDir)
-    const markdownFiles = filenames.filter(name => name.endsWith('.md'))
-
-    const articles: Article[] = []
-
-    for (const filename of markdownFiles) {
-        const filePath = path.join(articlesDir, filename)
-        const fileContent = await fs.readFile(filePath, 'utf8')
-        const { data } = matter(fileContent)
-
-        const slug = filename.replace('.md', '')
-        const tags = data.tags || []
-
-        // 指定されたタグが含まれている記事のみを含める
-        const decodedTagSlug = decodeURIComponent(tagSlug)
-        if (tags.includes(decodedTagSlug)) {
-            articles.push({
-                slug,
-                title: data.title || 'タイトル',
-                category: data.category || '一般',
-                description: data.description || '説明文',
-                readTime: data.readTime || '5分',
-                date: data.date || '2025-07-04',
-                tags,
-            })
-        }
-    }
-
-    return articles
-}
-
-const getTagDisplayName = (tagSlug: string): string => {
-    // 日本語タグをそのまま使用
-    return decodeURIComponent(tagSlug)
-}
-
-interface PageProps {
-    params: Promise<{ slug: string }>
-}
 
 const TagPage = async ({ params }: PageProps) => {
     const { slug } = await params
     const articles = await getArticlesByTag(slug)
-    const tagDisplayName = getTagDisplayName(slug)
+    const tagDisplayName = decodeURIComponent(slug)
 
     return (
         <div className='min-h-screen'>

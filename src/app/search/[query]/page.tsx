@@ -1,68 +1,15 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
 import Card from '@/components/Card'
-import matter from 'gray-matter'
+import { searchArticles } from '@/lib/articles'
+import type { SearchPageProps } from '@/lib/types'
 import { ArrowLeft, Search } from 'lucide-react'
 import Link from 'next/link'
 
-interface Article {
-    slug: string
-    title: string
-    category: string
-    description: string
-    readTime: string
-    date: string
-    tags: string[]
-    content: string
-}
-
-const searchArticles = async (query: string): Promise<Article[]> => {
-    const articlesDir = path.join(process.cwd(), 'src', 'notes')
-    const filenames = await fs.readdir(articlesDir)
-    const markdownFiles = filenames.filter(name => name.endsWith('.md'))
-
-    const articles: Article[] = []
-    const searchTerm = query.toLowerCase()
-
-    for (const filename of markdownFiles) {
-        const filePath = path.join(articlesDir, filename)
-        const fileContent = await fs.readFile(filePath, 'utf8')
-        const { data, content } = matter(fileContent)
-
-        const slug = filename.replace('.md', '')
-        const title = data.title || 'タイトル'
-        const description = data.description || '説明文'
-        const category = data.category || '一般'
-        const tags = data.tags || []
-
-        // 検索条件: タイトルのみ
-        if (title.toLowerCase().includes(searchTerm)) {
-            articles.push({
-                slug,
-                title,
-                category,
-                description,
-                readTime: data.readTime || '5分',
-                date: data.date || '2025-07-04',
-                tags,
-                content,
-            })
-        }
-    }
-
-    return articles
-}
-
-interface PageProps {
-    params: { query: string }
-}
-
-const SearchPage = async ({ params }: PageProps) => {
+const SearchPage = async ({ params }: SearchPageProps) => {
     const decodedQuery = decodeURIComponent(params.query)
     const articles = await searchArticles(decodedQuery)
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
+        <div className='min-h-screen'>
             <div className='container mx-auto px-4 py-8 max-w-6xl'>
                 {/* Header */}
                 <div className='mb-8'>

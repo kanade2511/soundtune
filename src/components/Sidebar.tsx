@@ -1,49 +1,10 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
-import matter from 'gray-matter'
-import { Calendar, Clock, Mail, MessageCircle } from 'lucide-react'
+import { getLatestArticles } from '@/lib/articles'
+import { Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { SearchBox } from './SearchBox'
 
-interface Article {
-    slug: string
-    title: string
-    category: string
-    date: string
-    readTime: string
-}
-
-const getLatestArticles = async (): Promise<Article[]> => {
-    const articlesDir = path.join(process.cwd(), 'src', 'notes')
-    const filenames = await fs.readdir(articlesDir)
-    const markdownFiles = filenames.filter(name => name.endsWith('.md'))
-
-    const articles: Article[] = []
-
-    for (const filename of markdownFiles) {
-        const filePath = path.join(articlesDir, filename)
-        const fileContent = await fs.readFile(filePath, 'utf8')
-        const { data } = matter(fileContent)
-
-        const slug = filename.replace('.md', '')
-
-        articles.push({
-            slug,
-            title: data.title || 'タイトル',
-            category: data.category || '一般',
-            date: data.date || '2025-07-04',
-            readTime: data.readTime || '5分',
-        })
-    }
-
-    // 日付順にソート（新しい順）
-    articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-    return articles.slice(0, 5) // 最新5記事
-}
-
 const Sidebar = async () => {
-    const latestArticles = await getLatestArticles()
+    const latestArticles = await getLatestArticles(5)
 
     return (
         <div className='space-y-6'>

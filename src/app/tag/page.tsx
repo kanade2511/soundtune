@@ -1,46 +1,8 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
 import Breadcrumb from '@/components/Breadcrumb'
 import TagCard from '@/components/TagCard'
-import matter from 'gray-matter'
+import { getAllTags } from '@/lib/articles'
 import { Tag } from 'lucide-react'
 import Link from 'next/link'
-
-interface TagInfo {
-    slug: string
-    displayName: string
-    count: number
-}
-
-const getAllTags = async (): Promise<TagInfo[]> => {
-    const articlesDir = path.join(process.cwd(), 'src', 'notes')
-    const filenames = await fs.readdir(articlesDir)
-    const markdownFiles = filenames.filter(name => name.endsWith('.md'))
-
-    const tagCounts: Record<string, number> = {}
-
-    for (const filename of markdownFiles) {
-        const filePath = path.join(articlesDir, filename)
-        const fileContent = await fs.readFile(filePath, 'utf8')
-        const { data } = matter(fileContent)
-
-        const tags = data.tags || []
-        for (const tag of tags) {
-            tagCounts[tag] = (tagCounts[tag] || 0) + 1
-        }
-    }
-
-    const tagInfos: TagInfo[] = Object.entries(tagCounts).map(([slug, count]) => ({
-        slug,
-        displayName: slug, // 日本語タグをそのまま使用
-        count,
-    }))
-
-    // 記事数順にソート
-    tagInfos.sort((a, b) => b.count - a.count)
-
-    return tagInfos
-}
 
 const TagsPage = async () => {
     const tags = await getAllTags()

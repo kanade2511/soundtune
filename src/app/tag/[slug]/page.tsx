@@ -43,6 +43,7 @@ const TagPage = async ({ params }: PageProps) => {
                                 readTime={article.readTime}
                                 date={article.date}
                                 tags={article.tags}
+                                thumbnail={article.thumbnail}
                             />
                         ))}
                     </div>

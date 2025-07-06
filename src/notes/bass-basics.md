@@ -5,6 +5,7 @@ description: 'ベースの役割、演奏方法、様々なジャンルでの特
 readTime: '10分'
 date: '2025-07-04'
 tags: ['ベース', '初心者向け', '楽器']
+thumbnail: '/notes.jpg'
 ---
 
 # ベース基本ガイド

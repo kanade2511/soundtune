@@ -5,6 +5,7 @@ description: 'SoundTuneの使い方と楽器の世界について紹介します
 readTime: '3分'
 date: '2025-07-04'
 tags: ['はじめに', 'ようこそ', 'ガイド']
+thumbnail: '/notes.jpg'
 ---
 
 # Hello World - SoundTune

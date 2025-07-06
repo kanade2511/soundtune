@@ -28,6 +28,7 @@ const parseMarkdownFile = async (
         readTime: data.readTime || '5分',
         date: data.date || '2025-07-04',
         tags: data.tags || [],
+        thumbnail: data.thumbnail || undefined,
     }
 
     if (includeContent) {

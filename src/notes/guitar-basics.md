@@ -5,6 +5,7 @@ description: 'ギターの種類、基本的な演奏方法、メンテナンス
 readTime: '10分'
 date: '2025-07-04'
 tags: ['ギター', '初心者向け', '楽器', 'コード']
+thumbnail: '/notes.jpg'
 ---
 
 # ギター基本ガイド

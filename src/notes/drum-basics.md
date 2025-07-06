@@ -5,6 +5,7 @@ description: 'ドラムセットの構成からリズムパターン、練習方
 readTime: '12分'
 date: '2025-07-04'
 tags: ['ドラム', '初心者向け', '楽器', 'リズム']
+# thumbnail: '/notes.jpg'
 ---
 
 # ドラム基本ガイド

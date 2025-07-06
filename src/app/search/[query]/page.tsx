@@ -41,6 +41,7 @@ const SearchPage = async ({ params }: SearchPageProps) => {
                                 readTime={article.readTime}
                                 date={article.date}
                                 tags={article.tags}
+                                thumbnail={article.thumbnail}
                             />
                         ))}
                     </div>

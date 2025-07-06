@@ -22,22 +22,25 @@ const Card = ({
     readTime,
     date,
     tags,
-    thumbnail = 'https://picsum.photos/300/200',
+    thumbnail,
 }: CardProps) => {
     return (
         <div className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden'>
+            {' '}
             <Link href={`/notes/${slug}`} className='block'>
                 {/* 画像エリア */}
                 <div className='relative h-48'>
-                    <div className='absolute inset-0 bg-white bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px] rounded'>
-                        <div className='absolute inset-0 flex items-center justify-center'>
-                            <Loader className='h-8 w-8 text-gray-400 animate-spin' />
+                    <div className='absolute inset-0 bg-white bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px] rounded z-10'>
+                        <div className='absolute bottom-3 right-3 z-5'>
+                            <Loader className='h-6 w-6 text-gray-400 animate-spin' />
                         </div>
-                        {/* <img
-                            src={thumbnail}
-                            alt={title}
-                            className='absolute inset-0 w-full h-full object-cover z-10'
-                        /> */}
+                        {thumbnail && (
+                            <img
+                                src={thumbnail}
+                                alt={title}
+                                className='absolute inset-0 w-full h-full object-cover z-10'
+                            />
+                        )}
                         {/* カテゴリラベル */}
                         <div className='absolute top-3 left-3 z-20'>
                             <span className='text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full'>
@@ -72,7 +75,6 @@ const Card = ({
                     </div>
                 </div>
             </Link>
-
             {/* タグ */}
             {tags.length > 0 && (
                 <div className='px-4 pb-4'>

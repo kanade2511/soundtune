@@ -6,6 +6,7 @@ export interface Article {
     readTime: string
     date: string
     tags: string[]
+    thumbnail?: string
 }
 
 export interface ArticleWithContent extends Article {

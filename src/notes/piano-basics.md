@@ -5,6 +5,7 @@ description: 'ピアノの基本的な構造から演奏方法まで、初心者
 readTime: '8分'
 date: '2025-07-04'
 tags: ['ピアノ', '初心者向け', '楽器', 'キーボード']
+thumbnail: '/notes.jpg'
 ---
 
 # ピアノ基本ガイド

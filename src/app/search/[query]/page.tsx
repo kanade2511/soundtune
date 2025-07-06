@@ -5,7 +5,8 @@ import { ArrowLeft, Search } from 'lucide-react'
 import Link from 'next/link'
 
 const SearchPage = async ({ params }: SearchPageProps) => {
-    const decodedQuery = decodeURIComponent(params.query)
+    const { query } = await params
+    const decodedQuery = decodeURIComponent(query)
     const articles = await searchArticles(decodedQuery)
 
     return (

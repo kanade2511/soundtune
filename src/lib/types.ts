@@ -23,5 +23,5 @@ export interface PageProps {
 }
 
 export interface SearchPageProps {
-    params: { query: string }
+    params: Promise<{ query: string }>
 }

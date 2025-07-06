@@ -33,11 +33,11 @@ const Card = ({
                         <div className='absolute inset-0 flex items-center justify-center'>
                             <Loader className='h-8 w-8 text-gray-400 animate-spin' />
                         </div>
-                        <img
+                        {/* <img
                             src={thumbnail}
                             alt={title}
                             className='absolute inset-0 w-full h-full object-cover z-10'
-                        />
+                        /> */}
                         {/* カテゴリラベル */}
                         <div className='absolute top-3 left-3 z-20'>
                             <span className='text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full'>

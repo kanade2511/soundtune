@@ -1,6 +1,5 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import Breadcrumb from '@/components/Breadcrumb'
 import Card from '@/components/Card'
 import matter from 'gray-matter'
 import { ArrowLeft, Search } from 'lucide-react'
@@ -36,9 +35,8 @@ const searchArticles = async (query: string): Promise<Article[]> => {
         const category = data.category || '一般'
         const tags = data.tags || []
 
-        const match = content.toLowerCase().includes(searchTerm)
-
-        if (match) {
+        // 検索条件: タイトルのみ
+        if (title.toLowerCase().includes(searchTerm)) {
             articles.push({
                 slug,
                 title,
@@ -56,20 +54,16 @@ const searchArticles = async (query: string): Promise<Article[]> => {
 }
 
 interface PageProps {
-    params: Promise<{ query: string }>
+    params: { query: string }
 }
 
 const SearchPage = async ({ params }: PageProps) => {
-    const { query } = await params
-    const decodedQuery = decodeURIComponent(query)
+    const decodedQuery = decodeURIComponent(params.query)
     const articles = await searchArticles(decodedQuery)
 
     return (
-        <div className='min-h-screen'>
+        <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50'>
             <div className='container mx-auto px-4 py-8 max-w-6xl'>
-                {/* Breadcrumb */}
-                <Breadcrumb items={[{ label: '検索結果' }, { label: `「${decodedQuery}」` }]} />
-
                 {/* Header */}
                 <div className='mb-8'>
                     <div className='flex items-center space-x-2 mb-4'>
@@ -88,7 +82,7 @@ const SearchPage = async ({ params }: PageProps) => {
 
                 {/* Search Results */}
                 {articles.length > 0 ? (
-                    <div className='grid gap-6 md:grid-cols-2 mb-12'>
+                    <div className='space-y-6 mb-12'>
                         {articles.map(article => (
                             <Card
                                 key={article.slug}

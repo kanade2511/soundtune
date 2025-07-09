@@ -151,12 +151,12 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                                             {item.label}
                                             {/* デフォルト表示でホバー時に消える下線 */}
                                             <span
-                                                className={`absolute -bottom-[3px] left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 transition-all duration-300 ease-out origin-left scale-x-100 group-hover/link:scale-x-0 ${
+                                                className={`absolute -bottom-[3px] left-0 w-full h-[2px] bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 transition-all duration-300 ease-out origin-left scale-x-100 group-hover/link:scale-x-0 ${
                                                     isOpen ? 'opacity-100' : 'opacity-0'
                                                 }`}
                                                 style={{
                                                     transitionDelay: isOpen
-                                                        ? `${130 * (index + 1)}ms`
+                                                        ? `${260 * (index + 1)}ms`
                                                         : '0ms',
                                                 }}
                                             />

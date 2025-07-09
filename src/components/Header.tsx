@@ -1,10 +1,18 @@
 'use client'
 
+import HamburgerMenu from '@/components/HamburgerMenu'
 import { SearchBox } from '@/components/SearchBox'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState } from 'react'
 
 const Header = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen)
+    }
+
     return (
         <header className='sticky top-0 z-50 border-b border-blue-200 bg-white/80 backdrop-blur-sm h-20'>
             <div className='container mx-auto px-4 h-full'>
@@ -33,7 +41,14 @@ const Header = () => {
                     </div>
 
                     <div className='flex items-center space-x-4'>
-                        <SearchBox />
+                        {/* デスクトップでは検索ボックス、モバイルでは非表示 */}
+                        <div className='hidden md:block'>
+                            <SearchBox />
+                        </div>
+                        {/* モバイルでのみハンバーガーメニューを表示 */}
+                        <div className='md:hidden relative'>
+                            <HamburgerMenu isOpen={isMenuOpen} onToggle={toggleMenu} />
+                        </div>
                     </div>
                 </div>
             </div>

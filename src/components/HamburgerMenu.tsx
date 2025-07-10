@@ -48,7 +48,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
     const menuItems = [
         { href: '/', label: 'ホーム' },
         { href: '/tag', label: 'タグ一覧' },
-        { href: '/notes', label: '記事一覧' },
+        { href: '/', label: '記事一覧' },
     ]
 
     return (
@@ -144,22 +144,11 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                                             }`}
                                             style={{
                                                 transitionDelay: isOpen
-                                                    ? `${50 * (index + 1)}ms`
+                                                    ? `${150 * (index + 1)}ms`
                                                     : '0ms',
                                             }}
                                         >
                                             {item.label}
-                                            {/* デフォルト表示でホバー時に消える下線 */}
-                                            <span
-                                                className={`absolute -bottom-[3px] left-0 w-full h-[2px] bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 transition-all duration-300 ease-out origin-left scale-x-100 group-hover/link:scale-x-0 ${
-                                                    isOpen ? 'opacity-100' : 'opacity-0'
-                                                }`}
-                                                style={{
-                                                    transitionDelay: isOpen
-                                                        ? `${260 * (index + 1)}ms`
-                                                        : '0ms',
-                                                }}
-                                            />
                                         </Link>
                                     </li>
                                 ))}

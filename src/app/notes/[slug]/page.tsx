@@ -6,7 +6,7 @@ import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import '../notes.css'
+import './article.css'
 
 interface PostMetadata {
     title: string

@@ -47,8 +47,8 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
 
     const menuItems = [
         { href: '/', label: 'ホーム' },
+        { href: '/notes', label: '記事一覧' },
         { href: '/tag', label: 'タグ一覧' },
-        { href: '/', label: '記事一覧' },
     ]
 
     return (

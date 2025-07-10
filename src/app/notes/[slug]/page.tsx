@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import '../notes.css'
 
 interface PostMetadata {
     title: string
@@ -56,7 +57,6 @@ const Page = async ({ params }: PageProps) => {
         <div className='min-h-screen'>
             {/* Article */}
             <article className='container mx-auto px-4 py-8 max-w-4xl'>
-                {/* Breadcrumb */}
                 {/* Breadcrumb */}
                 <Breadcrumb
                     items={[
@@ -110,10 +110,8 @@ const Page = async ({ params }: PageProps) => {
                 </div>
 
                 {/* Article Content */}
-                <div className='bg-white rounded-2xl shadow-lg p-8 md:p-12'>
-                    <div className='prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-code:text-blue-600 prose-code:bg-blue-50 prose-pre:bg-gray-50 prose-blockquote:border-l-blue-500 prose-blockquote:text-gray-600'>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
-                    </div>
+                <div className='blog-content prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-code:text-blue-600 prose-code:bg-blue-50 prose-pre:bg-gray-50 prose-blockquote:border-l-blue-500 prose-blockquote:text-gray-600'>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
                 </div>
 
                 {/* Navigation */}

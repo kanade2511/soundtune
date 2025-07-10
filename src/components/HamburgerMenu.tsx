@@ -54,7 +54,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
     return (
         <>
             {/* ハンバーガーメニューボタン */}
-            <div className='fixed top-5 right-8 z-[9999] w-10 h-10 flex items-center justify-center'>
+            <div className='fixed top-5 right-8 z-50 w-10 h-10 flex items-center justify-center'>
                 <button
                     type='button'
                     onClick={onToggle}
@@ -87,7 +87,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
             {/* 全画面メニュー */}
             <div
                 className={`fixed inset-0 w-full h-screen bg-gradient-to-br from-blue-100 via-white to-indigo-100 transition-all duration-300 ease-[cubic-bezier(0.11,0.24,0.64,1)] ${
-                    isOpen ? 'z-[100] opacity-100 visible' : '-z-10 opacity-0 invisible'
+                    isOpen ? 'z-40 opacity-100 visible' : '-z-10 opacity-0 invisible'
                 }`}
             >
                 <div className='flex justify-center items-center h-full py-8'>

@@ -10,7 +10,7 @@ const Footer = () => {
                     <div className='flex items-center justify-center space-x-2 text-gray-600'>
                         <Link href='/'>
                             <Image
-                                src='/logo_normal.png'
+                                src='/images/logo/logo_normal.png'
                                 alt='SoundTune'
                                 height={1024}
                                 width={1024}

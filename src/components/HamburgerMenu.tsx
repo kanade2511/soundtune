@@ -101,7 +101,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                                         <div className='max-w-[270px] sm:max-w-[320px] md:max-w-[360px] w-full mx-auto'>
                                             <div className='relative aspect-[9/2] w-full'>
                                                 <Image
-                                                    src='/logo_normal.png'
+                                                    src='/images/logo/logo_normal.png'
                                                     alt='SoundTune'
                                                     fill
                                                     className='object-contain'

@@ -4,7 +4,6 @@ import './globals.css'
 
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import ProgressBarProvider from '@/components/ProgressBarProvider'
 import Sidebar from '@/components/Sidebar'
 
 const geistSans = Geist({
@@ -35,14 +34,12 @@ const RootLayout = ({
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <div className='background bg-gradient-to-br from-blue-100 via-white to-indigo-100'>
                     <Header />
-                    <ProgressBarProvider>
                         <div className='container mx-auto px-4 py-8'>
                             <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
                                 <div className='lg:col-span-2'>{children}</div>
                                 <Sidebar />
                             </div>
                         </div>
-                    </ProgressBarProvider>
                     <Footer />
                 </div>
             </body>

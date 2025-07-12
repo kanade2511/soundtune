@@ -37,11 +37,11 @@ const getMarkdownWithMetadata = async (
         return {
             content,
             metadata: {
-                title: data.title || '記事タイトル',
-                category: data.category || '一般',
-                description: data.description || '記事の説明文',
-                readTime: data.readTime || '5分',
-                date: data.date || '2025-07-04',
+                title: data.title || 'タイトルがありません',
+                category: data.category || '',
+                description: data.description || '',
+                readTime: data.readTime || '',
+                date: data.date || '',
                 tags: data.tags || [],
             },
         }

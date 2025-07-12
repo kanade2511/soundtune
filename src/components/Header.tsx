@@ -30,7 +30,7 @@ const Header = () => {
                             />
                             {/* Mobile Logo */}
                             <Image
-                                src='/logo_small.png'
+                                src='/images/logo/logo_small.png'
                                 alt='SoundTune'
                                 height={256}
                                 width={256}

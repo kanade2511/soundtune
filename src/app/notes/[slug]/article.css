@@ -132,6 +132,9 @@
     border-radius: 0.5rem;
     margin: 1.5rem 0;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* 水平線スタイル */
@@ -153,4 +156,15 @@
 .blog-content a:hover {
     color: #2b6cb0;
     border-bottom: 1px solid #2b6cb0;
+}
+
+.blog-content .sidenote {
+    font-size: 0.8rem;
+    color: #718096;
+    font-style: italic;
+    text-align: right;
+    display: block;
+    margin-top: -1.25rem;
+    margin-bottom: 1.5rem;
+    padding-right: 0.5rem;
 }

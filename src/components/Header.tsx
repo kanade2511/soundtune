@@ -21,7 +21,7 @@ const Header = () => {
                         <Link href='/' className='flex items-center'>
                             {/* Desktop Logo */}
                             <Image
-                                src='/logo_normal.png'
+                                src='/images/logo/logo_normal.png'
                                 alt='SoundTune'
                                 height={1024}
                                 width={1024}

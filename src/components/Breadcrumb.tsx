@@ -16,7 +16,7 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
         <nav className='flex items-center space-x-2 text-sm text-gray-500 mb-6'>
             <Link href='/' className='flex items-center hover:text-gray-700 transition-colors'>
                 <Image
-                    src='/logo_small.png'
+                    src='/images/logo/logo_small.png'
                     alt='SoundTune'
                     width={32}
                     height={32}

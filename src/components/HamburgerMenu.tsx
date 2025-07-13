@@ -4,6 +4,7 @@ import { SearchBox } from '@/components/SearchBox'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
+import isMobile from 'react-device-detect'
 
 interface HamburgerMenuProps {
     isOpen: boolean
@@ -96,7 +97,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                         <nav>
                             <div className='text-center mb-8'>
                                 {/* ロゴ画像 - アスペクト比9:2を維持しつつレスポンシブ対応 */}
-                                <Link href='/'>
+                                <Link href='/' onClick={onToggle}>
                                     <div className='relative mx-auto mb-6 w-full px-4'>
                                         <div className='max-w-[270px] sm:max-w-[320px] md:max-w-[360px] w-full mx-auto'>
                                             <div className='relative aspect-[9/2] w-full'>
@@ -118,7 +119,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                                     <div className='max-w-[270px] sm:max-w-[320px] md:max-w-[360px] w-full mx-auto'>
                                         <SearchBox
                                             ref={searchInputRef}
-                                            variant='hamburgerMenu'
+                                            variant={isMobile ? 'hamburgerMenu' : 'sidebar'}
                                             title=''
                                             onSearch={onToggle} // 検索時にメニューを閉じる
                                         />

@@ -85,4 +85,4 @@ thumbnail: '/images/how_to_use_mixer/how_to_use_mixer.jpg'
 
 [EMX5016CF取扱説明書](https://jp.yamaha.com/files/download/other_assets/3/322663/emx5016cf_ja_om_e0.pdf)
 
-[音響ミキサーの基本的な扱い方(Youtube)]("https://www.youtube.com/embed/VEPXzsQUufA")
+[音響ミキサーの基本的な扱い方(Youtube)](https://www.youtube.com/embed/VEPXzsQUufA)

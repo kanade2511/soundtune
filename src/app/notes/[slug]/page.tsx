@@ -5,9 +5,10 @@ import matter from 'gray-matter'
 import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
+import remarkGfm from 'remark-gfm'
 import './article.css'
+import type { Metadata } from 'next'
 
 interface PostMetadata {
     title: string
@@ -37,7 +38,7 @@ const getMarkdownWithMetadata = async (
         return {
             content,
             metadata: {
-                title: data.title || 'タイトルがありません',
+                title: data.title || '記事タイトルが見つかりませんでした',
                 category: data.category || '',
                 description: data.description || '',
                 readTime: data.readTime || '',
@@ -47,6 +48,15 @@ const getMarkdownWithMetadata = async (
         }
     } catch (error) {
         throw new Error('記事が見つかりません')
+    }
+}
+
+export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
+    const { slug } = await params
+    const { metadata } = await getMarkdownWithMetadata(slug)
+    return {
+        title: `${metadata.title} - SoundTune`,
+        description: metadata.description,
     }
 }
 
@@ -112,7 +122,9 @@ const Page = async ({ params }: PageProps) => {
 
                 {/* Article Content */}
                 <div className='blog-content prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-strong:text-gray-900 prose-code:text-blue-600 prose-code:bg-blue-50 prose-pre:bg-gray-50 prose-blockquote:border-l-blue-500 prose-blockquote:text-gray-600'>
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{content}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                        {content}
+                    </ReactMarkdown>
                 </div>
 
                 {/* Navigation */}

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: 'SoundTune',
     // description: '',
     icons: {
-        icon: '/logo.png',
+        icon: '/images/logo/favicon.png',
     },
 }
 
@@ -31,15 +31,18 @@ const RootLayout = ({
 }>) => {
     return (
         <html lang='ja'>
+            <head>
+                <meta name='apple-mobile-web-app-title' content='SoundTune' />
+            </head>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
                 <div className='background bg-gradient-to-br from-blue-100 via-white to-indigo-100'>
                     <Header />
-                        <div className='container mx-auto px-4 py-8'>
-                            <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-                                <div className='lg:col-span-2'>{children}</div>
-                                <Sidebar />
-                            </div>
+                    <div className='container mx-auto px-4 py-8'>
+                        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+                            <div className='lg:col-span-2'>{children}</div>
+                            <Sidebar />
                         </div>
+                    </div>
                     <Footer />
                 </div>
             </body>

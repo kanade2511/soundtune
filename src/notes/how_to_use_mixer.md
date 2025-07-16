@@ -3,7 +3,7 @@ title: '楽器をつなげて音を出す「あの機材」の基本的な使い
 category: 'ミキサー'
 description: 'ミキサーの基本的なつなぎ方・使い方'
 readTime: '10分'
-date: '2025-07-11'
+date: '2025-07-14'
 tags: ['ミキサー', 'マイク', '初心者向け', '基礎知識', 'ライブ', '機材', '対処法']
 thumbnail: '/images/how_to_use_mixer/how_to_use_mixer.jpg'
 ---
@@ -49,7 +49,7 @@ thumbnail: '/images/how_to_use_mixer/how_to_use_mixer.jpg'
 - **③GAIN：** 入力の音量の調整ができます。
 - **④ON(ミュートスイッチ)：** 各マイクや楽器のON/OFFができます。
 - **⑤フェーダー：** 出力の音量の調節ができます。GAINとの違いは最初はわからなくても大丈夫です。
-![XLRケーブル](/images/how_to_use_mixer/XLRCable.jpg)
+![XLRケーブル](/images/how_to_use_mixer/XLR_cable.jpg)
 <div className='sidenote'>マイクケーブル（XLRケーブル）</div>
 
 

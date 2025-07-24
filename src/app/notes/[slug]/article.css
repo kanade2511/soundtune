@@ -168,3 +168,11 @@
     margin-bottom: 1.5rem;
     padding-right: 0.5rem;
 }
+
+/* audioタグスタイル */
+.blog-content audio {
+    width: 100%;
+    max-width: 480px;
+    display: block;
+    margin: 1.5rem auto;
+}

@@ -34,6 +34,24 @@ thumbnail: '/images/bass_basic/bass_basic.jpg'
 
 つまり簡単に言うと **「音楽の中で一番低い音でみんなを支える楽器」** ということになります。
 
-<audio controls loop>
-    <source src='/audio/bass_basic/finger.wav'>
+ベースが担当している音を聞いてみましょう (以下拙劣な演奏・アレンジですが許してください)
+
+<audio controls controlslist="nodownload" preload="metadata">
+    <source src='/audio/bass_basic/BasicRoot.mp3'>
+    お使いのブラウザはこの音声の再生に対応していません
 </audio>
+
+では次にこの音がピアノ、ドラム、ベースの中でどう聞こえるかを聞いてみましょう！
+
+コード進行は「丸の内サディスティック / 椎名林檎」や「夜に駆ける / YOASOBI」など現代のポップスによく使われる丸サ進行(Just The Two Of Us進行)自分の手癖でアレンジしたものです。
+
+<audio controls controlslist="nodownload" preload="metadata">
+    <source src='/audio/bass_basic/MixedBasicRoot.mp3'>
+    お使いのブラウザはこの音声の再生に対応していません
+</audio>
+
+
+![バンドセッション](/images/bass_basic/band_session.jpg)
+<div className='sidenote'>私はギターが得意ではですが、コードのピアノパートをギターで弾くのも馴染みそうですね。</div>
+
+不思議と今まで聞こえていなかったベースの音が聞こえて来たのではないでしょうか。

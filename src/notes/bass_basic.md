@@ -13,8 +13,6 @@ thumbnail: '/images/bass_basic/bass_basic.jpg'
 ![E. Bass](/images/bass_basic/bass_basic.jpg)
 <div className='sidenote'>E. Jazz Bass</div>
 
-<!--todo ベースとは(4つ弦) => 魅力 => 最初のベース(プレシジョン)-->
-
 近年のバンド音楽には欠かせない楽器、ベース。
 
 巷ではよく **「このバンドのライブ行ったんだけどさ、かっこいいんだよね、ベースが。」** や
@@ -55,3 +53,75 @@ thumbnail: '/images/bass_basic/bass_basic.jpg'
 <div className='sidenote'>私はギターが弾けませんが、コードのピアノパートをギターで弾くのも馴染みそうですね。</div>
 
 不思議と今まで聞こえていなかったベースの音が聞こえて来たのではないでしょうか。
+ベースという楽器は低音を出すという楽器の特性上、**音を知らない人はあまり聞こえづらい部分もありますがベースの音が聞こえるようになるととても存在感のあるパートです。**
+
+では実際の楽曲、「踊り子 / Vaundy」でのベースの音を意識して聞いてみましょう！
+この曲はイントロのフレーズをずっと繰り返しています
+
+<div className="relative w-full aspect-video max-w-3xl mx-auto">
+  <iframe
+    className="absolute top-0 left-0 w-full h-full"
+    src="https://www.youtube.com/embed/7HgJIAUtICU"
+    title="【第75回NHK紅白歌合戦 歌唱曲】踊り子 / Vaundy：MUSIC VIDEO"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allowFullScreen
+  ></iframe>
+</div>
+
+段々とベースの音が聞こえてきたのではないでしょうか？では難易度を少し上げて「Flamingo / 米津玄師」を聞いてみましょう
+
+<div className="relative w-full aspect-video max-w-3xl mx-auto">
+  <iframe
+    className="absolute top-0 left-0 w-full h-full"
+    src="https://www.youtube.com/embed/Uh6dkL1M9DM?list=RDUh6dkL1M9DM"
+    title="米津玄師  - Flamingo / Kenshi Yonezu"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allowFullScreen
+  ></iframe>
+</div>
+
+### まとめ
+ベースと言う楽器はギターの１オクターブ下の音域の音を弾き、**ドラムとともにバンド曲の土台部分を作るのが役割です。**
+聞こえるようになるととても存在感のあるパートでベースがないと音が**スカスカになり少し物足りない曲に**なってしまう事が多いです。
+
+## 様々な音、様々な奏法
+
+ここからは少し踏み込んだ内容になりますが、興味のある方はぜひ読み進めてみてください。
+
+## ベースの種類
+ベースという楽器は主に３つに大別されます。「プレシジョンベース」「ジャズベース」「ミュージックマンタイプ」です。
+
+- **プレシジョンベース（P-Bass・プレベ）**
+
+1951年にFender社が開発した、世界初の量産型エレキベースです。太くて柔らかい音が特徴で、ロックやポップスなど幅広いジャンルで使われています。世界初のエレキベースなだけあって少し不器用な音がする印象を受けますが、私を含め幅広い層から人気を博しています。
+
+- **ジャズベース（J-Bass・ジャズベ）**
+
+1960年に登場したFenderのもう一つの代表モデルです。音作りの幅が広いのが特徴です。スリムなネックで弾きやすく、ジャズベースという名前ですが現代のポップスでもとてもよく使われている、万人受けするベースです。プレシジョンベースよりも固く、角ばった印象を受けるため「スラップ奏法」と呼ばれる弦を弾く奏法に向いています。ネックが細く、現代ポップスでは一番使われているので、初心者の方が選んでも後悔しない楽器だと思います。
+
+- **ミュージックマンタイプ**
+
+1970年代に登場したMusic Man社の「StingRay」などが有名です。電池を利用したアクティブ回路を搭載し、パワフルで抜けの良いサウンドが特徴です。ジャズベースと同様に「スラップ奏法」に向いています。プレイングが上手いベーシストは熱狂的なStingRayファンが多いイメージがあります。
+
+-  **PJベース**
+
+プレシジョンベースにジャズベースの要素を加えたような楽器で、プレシジョンベースの音に加えPJベースならではの独特な音色も出せます。
+
+## ベースの奏法
+先ほどのべーすの種類の説明にもあったように、ベースには実はいくつかの奏法があります。
+
+- **指弾き（フィンガーピッキング）**
+
+最も基本的な奏法です。人差し指や中指で弦を弾くことで、柔らかく太い音が出ます。多くのジャンルで使われる万能な奏法です。
+
+- **ピック弾き**
+
+ギターのようにピックを使って弾く方法です。アタック感が強く、ロックやポップスでよく使われます。音が前に出て、バンドサウンドに抜けやすいのが特徴です。
+
+- **スラップ奏法**
+
+親指で弦を叩き（サムピング）、人差し指などで弦を引っ張って離す（プル）ことで、パーカッシブで派手な音を出す奏法です。ファンクやポップスでよく使われます。

@@ -3,7 +3,7 @@ title: 'ギターとの違いは？ベースの基礎と魅力を徹底解説！
 category: 'ベース'
 description: '意外と知らないベースの役割'
 readTime: '10分'
-date: '2025-07-15'
+date: '2025-07-30'
 tags: ['ベース', '初心者向け', '基礎知識', '他パートでも知っておきたい']
 thumbnail: '/images/bass_basic/bass_basic.jpg'
 ---

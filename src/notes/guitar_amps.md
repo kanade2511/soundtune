@@ -1,35 +1,37 @@
 ---
 title: 'スタジオやライブの定番のアンプ！【Roland Jazz Chorus＆Marshall篇】'
 category: 'ギター'
-description: 'ギターアンプと言ったらこれ！定番アンプ、Roland Jazz Chorus 120とMarshall JCM2000のそれぞれの使い方・特徴などを解説'
-readTime: '5分'
-date: '2025-08-4'
-tags: ['ギター', '初心者向け', '基礎知識', 'ギター基礎講座']
+description: 'ギタリストなら誰もが一度は音を出す、定番アンプの二大巨頭。Roland Jazz Chorus 120とMarshall JCM2000の魅力、そしてそのポテンシャルを最大限に引き出す使い方を徹底解説します。'
+readTime: '7分'
+date: '2025-08-05'
+tags: ['ギター', '初心者向け', '基礎知識', 'アンプ', '音作り']
 thumbnail: '/images/guitar_amps/guitar_amps.jpg'
 ---
 
 # スタジオやライブの定番のアンプ！【Roland Jazz Chorus＆Marshall篇】
 
 ![Marshallアンプ](/images/guitar_amps/guitar_amps.jpg)
-<div className='sidenote'>Marshallアンプ</div>
+<div className='sidenote'>Marshall & Roland Amps</div>
 
-ライブハウスのステージ、リハーサルスタジオの壁際に、必ずと言っていいほど鎮座している2つのアンプがあります。歪み（ひずみ）のないクリーンサウンドの代名詞Roland JC-120と、歪みのあるロックサウンドの王道Marshall JCM2000です。なぜプロの現場でこの2台が選ばれ続けるのか？今回は、ギタリストなら誰もが一度は音を出すことになるであろう、この定番アンプを解説します。
+ライブハウスの薄暗いステージ、あるいはリハーサルスタジオの壁際。そこには、まるでギタリストの挑戦を待ち構えるかのように、2つの象徴的なアンプが鎮座しています。一つは、透き通るようなクリーンサウンドで世界を魅了する**Roland JC-120**。もう一つは、魂を揺さぶるドライブサウンドでロックの歴史を刻んできた**Marshall JCM2000**。
 
-## Roland Jazz Chorus 120 (通称ジャズコ)
+なぜ、この2台は時代を超えてプロの現場で選ばれ続けるのでしょうか？今回は、すべてのギタリストが一度は向き合うことになるであろう、この伝説的なアンプたちの魅力と、そのポテンシャルを最大限に引き出す方法を解き明かしていきます。
+
+## Roland Jazz Chorus 120 (通称：ジャズコ)
 
 ![JC-120本体](/images/guitar_amps/JC120.jpg)
 <div className='sidenote'>
-    <a href='https://www.roland.com/jp/products/jc-120/' target='_blank'>https://www.roland.com/jp/products/jc-120/</a>より引用
+    <a href='https://www.roland.com/jp/products/jc-120/' target='_blank'>Roland Official Siteより引用</a>
 </div>
 
 Jazz Chorus 120という名前のJazzという言葉は元来、「何でもありのサウンドを演奏できる」という意味を持っています。これに対し、Chorusはこのアンプに内蔵された「コーラス」エフェクト音を指します。そして“120”は、このアンプの最大の出力パワー(ワット数)が120ワットであることを表しています。これらの頭文字を取り、「JC-120」と呼ばれています。
 
 ![JC-120フロントパネル](/images/guitar_amps/JC120_FrontPanel.jpg)
 <div className='sidenote'>
-    <a href='https://www.roland.com/jp/products/jc-120/' target='_blank'>https://www.roland.com/jp/products/jc-120/</a>より引用
+    <a href='https://www.roland.com/jp/products/jc-120/' target='_blank'>Roland Official Siteより引用</a>
 </div>
 
-JC-120にはChannel-1とChannel-2の２つのチャンネルがあり、どちらにシールドを接続しても基本的な音質や音は変わりません。しかしChannel-2の方には右側の黄色いエリアにエフェクターと呼ばれる音を変える機能がついています。
+JC-120には**Channel-1**と**Channel-2**の二つの入力系統があります。基本的な音質は共通ですが、Channel-2にはJC-120の代名詞である空間系エフェクト（コーラス/ビブラート、リバーブ）が搭載されており、より多彩な音作りが可能です。
 
 ### 使い方
 使い方はどちらのチャンネルでも基本的に同じです。
@@ -51,15 +53,12 @@ JC-120にはChannel-1とChannel-2の２つのチャンネルがあり、どち�
   お使いのブラウザはこの音声の再生に対応していません
 </audio>
 
-## Marshall JCM2000
+## Marshall JCM2000 (DSL)
 
 ![JCM2000本体](/images/guitar_amps/JCM2000.jpg)
-<div className='sidenote'>JCM2000</div>
-
+<div className='sidenote'>Marshall JCM2000 Head</div>
 
 JC-120が「クリーンサウンドの基準」とまで言われる透き通った音色を誇るのに対し、Marshall JCM2000は、まさに「ロックサウンドの象徴」です。その心臓部である真空管が生み出す、力強くも温かみのある歪み（ひずみ）は、数え切れないほどのロックギタリストを魅了し続けてきました。
-
-構造的にも対照的で、JC-120がアンプとスピーカーを一体化した「コンボタイプ」であるのに対し、JCM2000はアンプ部分（ヘッド）とスピーカー部分（キャビネット）が独立した「スタックタイプ」が一般的です。これにより、圧倒的な音圧と迫力を実現するだけでなく、ギタリストが好みのキャビネットを組み合わせて、自分だけのサウンドを追求できるという奥深さも持っています。
 
 ### 使い方
 基本的な使い方はJC-120と同じです。しかし真空管を搭載したアンプなので電源の付け方などに注意をしないと最悪壊れる可能性があります。
@@ -83,13 +82,20 @@ JC-120が「クリーンサウンドの基準」とまで言われる透き通�
   お使いのブラウザはこの音声の再生に対応していません
 </audio>
 
+## まとめ
+
+クリーンサウンドの最高峰**JC-120**と、ドライブサウンドの王道**JCM2000**。この二つのアンプは、それぞれが持つ個性と哲学で、数多の音楽シーンを支えてきました。
+
+どちらが良い、悪いということではありません。作りたい音楽、表現したい感情によって、その選択は変わります。まずはそれぞれの使い方と特性を理解し、スタジオで実際に音を出してみてください。
+
 ## 参考になる記事/動画
+
 ### JC-120
-- [大定番！JC-120を紹介【前編】](https://www.youtube.com/watch?v=MDtQUqY28Bk)
-- [大定番！JC-120を紹介【後編】](https://www.youtube.com/watch?v=EyegBh5_1hE)
-- [教えて！BOSSの人！！ 特別篇【JAZZ CHORUS大解剖 feat.かずき】](https://youtu.be/EtDO_noM8oY)
-- [音圧倍増!?万能ギターアンプJC-120を徹底紹介してみる](https://www.youtube.com/watch?v=0JxJ_ilST_0)
+- [大定番！JC-120を紹介【前編】 - YouTube](https://www.youtube.com/watch?v=MDtQUqY28Bk)
+- [大定番！JC-120を紹介【後編】 - YouTube](https://www.youtube.com/watch?v=EyegBh5_1hE)
+- [教えて！BOSSの人！！ 特別篇【JAZZ CHORUS大解剖 feat.かずき】 - YouTube](https://youtu.be/EtDO_noM8oY)
+- [音圧倍増!?万能ギターアンプJC-120を徹底紹介してみる - YouTube](https://www.youtube.com/watch?v=0JxJ_ilST_0)
 
 ### JCM2000
-- [マーシャルJCM2000アンプの基本的な使い方と音作り](https://www.youtube.com/watch?v=aWMxIe1934w)
-- [Marshall JCM2000 DSL - Versatile and REALLY EASY TO PLAY!](https://youtu.be/JwbthFNgQdk)
+- [マーシャルJCM2000アンプの基本的な使い方と音作り - YouTube](https://www.youtube.com/watch?v=aWMxIe1934w)
+- [Marshall JCM2000 DSL - Versatile and REALLY EASY TO PLAY! - YouTube](https://youtu.be/JwbthFNgQdk)

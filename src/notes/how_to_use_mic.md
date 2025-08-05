@@ -2,7 +2,7 @@
 title: 'マイクから音がならないときの原因と対処法'
 category: 'ミキサー'
 description: 'マイクを通して音を鳴らす方法'
-readTime: '10分'
+readTime: '5分'
 date: '2025-07-16'
 tags: ['マイク', 'ミキサー', '初心者向け', '音が出ない', '対処法']
 thumbnail: '/images/how_to_use_mic/how_to_use_mic.jpg'

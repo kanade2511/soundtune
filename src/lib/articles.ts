@@ -1,63 +1,47 @@
-import { promises as fs } from 'node:fs'
-import path from 'node:path'
-import matter from 'gray-matter'
-import type { Article, ArticleWithContent } from './types'
+import { createAdminClient } from './supabase/server'
 
-const articles_dir = path.join(process.cwd(), 'src', 'notes')
-
-const get_markdown_files = async (): Promise<string[]> => {
-    const filenames = await fs.readdir(articles_dir)
-    return filenames.filter(name => name.endsWith('.md'))
+type PublishedPostRow = {
+    article_id: string
+    title: string
+    content: string
+    created_at: string
+    profiles: { account_id: string } | { account_id: string }[] | null
 }
 
-const parse_markdown_file = async (
-    filename: string,
-    include_content = false,
-): Promise<Article | ArticleWithContent> => {
-    const file_path = path.join(articles_dir, filename)
-    const file_content = await fs.readFile(file_path, 'utf8')
-    const { data, content } = matter(file_content)
+type PublishedPost = {
+    article_id: string
+    title: string
+    content: string
+    created_at: string
+    account_id: string | null
+}
 
-    const slug = filename.replace('.md', '')
+export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
+    const supabase = createAdminClient()
+    const { data, error } = await supabase
+        .from('posts')
+        .select('article_id, title, content, created_at, profiles:profiles!author_id (account_id)')
+        .eq('published', true)
+        .eq('approval_status', 'approved')
+        .order('created_at', { ascending: false })
 
-    const article: Article = {
-        slug,
-        title: data.title || 'タイトル',
-        description: data.description || '説明文',
-        readTime: data.readTime || '5分',
-        date: data.date || '2025-07-04',
-        thumbnail: data.thumbnail || undefined,
+    if (error) {
+        return []
     }
 
-    if (include_content) {
-        return { ...article, content } as ArticleWithContent
-    }
-
-    return article
+    return (data ?? []).map((post: PublishedPostRow) => {
+        const profile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles
+        return {
+            article_id: post.article_id,
+            title: post.title,
+            content: post.content,
+            created_at: post.created_at,
+            account_id: profile?.account_id ?? null,
+        }
+    })
 }
 
-export const getAllArticles = async (): Promise<Article[]> => {
-    const markdown_files = await get_markdown_files()
-    const articles: Article[] = []
-
-    for (const filename of markdown_files) {
-        const article = await parse_markdown_file(filename)
-        articles.push(article as Article)
-    }
-
-    // 日付順にソート（新しい順）
-    articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-    return articles
+export const getLatestPublishedPosts = async (limit = 5): Promise<PublishedPost[]> => {
+    const posts = await getPublishedPosts()
+    return posts.slice(0, limit)
 }
-
-export const getLatestArticles = async (limit = 5): Promise<Article[]> => {
-    const articles = await getAllArticles()
-    return articles.slice(0, limit)
-}
-
-// タグによる記事取得は削除
-
-// 検索機能削除
-
-// タグ一覧取得も削除

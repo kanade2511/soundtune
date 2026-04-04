@@ -44,10 +44,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
         }
     }, [isOpen])
 
-    const menu_items = [
-        { href: '/', label: 'ホーム' },
-        { href: '/notes', label: '記事一覧' },
-    ]
+    const menu_items = [{ href: '/', label: 'ホーム' }]
 
     return (
         <>

@@ -1,23 +1,23 @@
 'use client'
 
 import { Calendar, Clock, Loader } from 'lucide-react'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface CardProps {
-    slug: string
     title: string
     description?: string
     readTime: string
     date: string
     thumbnail?: string
+    href: string
 }
 
-const Card = ({ slug, title, description, readTime, date, thumbnail }: CardProps) => {
+const Card = ({ title, description, readTime, date, thumbnail, href }: CardProps) => {
     return (
         <div className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden'>
             {' '}
-            <Link href={`/notes/${slug}`} className='block'>
+            <Link href={href} className='block'>
                 {/* 画像エリア */}
                 <div className='relative h-48'>
                     <div className='absolute inset-0 bg-white bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:24px_24px] rounded z-10'>

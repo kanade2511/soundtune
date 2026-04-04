@@ -11,14 +11,13 @@
 
 ## Stage 2 ログイン・記事CRUD実装
 - Google SSOでのログインを実装 → /auth/login
-- 記事ページの作成 → /[account_id]/[article_id]
+- 記事ページの作成 → /[account_id]/notes/[article_id]
 - 記事の投稿画面の作成 → /posts/new
 - 記事の編集・削除画面の作成 → /posts/edit?articleId=[article_id]
 - アカウント削除の実装
 
 ## Stage 3 記事ページプロトタイプ
 - 記事一覧の作成 → /
-- 検索機能の実装 (タイトル・本文のみ) → /search, /search?query={query}
 - ユーザープロフィール表示画面の作成 → /[account_id]
 - ユーザープロフィール編集画面の作成 → /profile
 
@@ -34,7 +33,8 @@
 - article_idは14文字固定（編集不可）の前提で運用
 - タグ機能を記事につける → /posts/new, /posts/edit
 - いいね機能を実装
-- category/description/readTime/date/thumbnail/tagsはのちに実装。
+- thumbnail/tagsはのちに実装。
+- 検索機能の実装 (タイトル・本文のみ) → /search, /search?query={query}
 
 ## Stage 6 最適化
 - 検索機能の強化 → /search

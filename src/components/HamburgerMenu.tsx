@@ -1,10 +1,8 @@
 'use client'
 
-import { SearchBox } from '@/components/SearchBox'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
-import isMobile from 'react-device-detect'
 
 interface HamburgerMenuProps {
     isOpen: boolean
@@ -49,7 +47,6 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
     const menu_items = [
         { href: '/', label: 'ホーム' },
         { href: '/notes', label: '記事一覧' },
-        { href: '/tag', label: 'タグ一覧' },
     ]
 
     return (
@@ -113,18 +110,6 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                                         </div>
                                     </div>
                                 </Link>
-
-                                {/* 検索ボックス - ロゴと同じ横幅で中央配置 */}
-                                <div className='px-4 w-full mx-auto'>
-                                    <div className='max-w-[270px] sm:max-w-[320px] md:max-w-[360px] w-full mx-auto'>
-                                        <SearchBox
-                                            ref={search_input_ref}
-                                            variant={isMobile ? 'hamburgerMenu' : 'sidebar'}
-                                            title=''
-                                            onSearch={onToggle} // 検索時にメニューを閉じる
-                                        />
-                                    </div>
-                                </div>
                             </div>
 
                             <ul className='space-y-0 mt-10'>

@@ -1,10 +1,8 @@
 ---
-title: 'スタジオやライブの定番のアンプ！【Roland Jazz Chorus＆Marshall篇】'
-category: 'ギター'
+title: 'スタジオやライブの定番のアンプ！【Roland Jazz Chorus＆Marshall編】'
 description: 'ギタリストなら誰もが一度は音を出す、定番アンプの二大巨頭。Roland Jazz Chorus 120とMarshall JCM2000の魅力、そしてそのポテンシャルを最大限に引き出す使い方を徹底解説します。'
 readTime: '7分'
 date: '2025-08-05'
-tags: ['ギター', '初心者向け', '基礎知識', 'アンプ', '音作り']
 thumbnail: '/images/guitar_amps/guitar_amps.jpg'
 ---
 

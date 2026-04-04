@@ -16,11 +16,9 @@ const Home = async () => {
                                 key={article.slug}
                                 slug={article.slug}
                                 title={article.title}
-                                category={article.category}
                                 description={article.description}
                                 readTime={article.readTime}
                                 date={article.date}
-                                tags={article.tags}
                                 thumbnail={article.thumbnail}
                             />
                         ))}

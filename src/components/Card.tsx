@@ -2,28 +2,18 @@
 
 import { Calendar, Clock, Loader } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface CardProps {
     slug: string
     title: string
-    category: string
     description?: string
     readTime: string
     date: string
-    tags: string[]
     thumbnail?: string
 }
 
-const Card = ({
-    slug,
-    title,
-    category,
-    description,
-    readTime,
-    date,
-    tags,
-    thumbnail,
-}: CardProps) => {
+const Card = ({ slug, title, description, readTime, date, thumbnail }: CardProps) => {
     return (
         <div className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden'>
             {' '}
@@ -35,18 +25,15 @@ const Card = ({
                             <Loader className='h-6 w-6 text-gray-400 animate-spin' />
                         </div>
                         {thumbnail && (
-                            <img
+                            <Image
                                 src={thumbnail}
                                 alt={title}
+                                fill
                                 className='absolute inset-0 w-full h-full object-cover z-10'
+                                sizes='(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw'
                             />
                         )}
-                        {/* カテゴリラベル */}
-                        <div className='absolute top-3 left-3 z-20'>
-                            <span className='text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full'>
-                                {category}
-                            </span>
-                        </div>
+                        {/* カテゴリラベル削除 */}
                     </div>
                 </div>
 
@@ -75,28 +62,7 @@ const Card = ({
                     </div>
                 </div>
             </Link>
-            {/* タグ */}
-            {tags.length > 0 && (
-                <div className='px-4 pb-4'>
-                    <div className='flex flex-wrap gap-1'>
-                        {tags.slice(0, 3).map(tag => (
-                            <Link
-                                key={tag}
-                                href={`/tag/${encodeURIComponent(tag)}`}
-                                className='text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded hover:bg-gray-200 transition-colors'
-                                onClick={e => e.stopPropagation()}
-                            >
-                                # {tag}
-                            </Link>
-                        ))}
-                        {tags.length > 3 && (
-                            <span className='text-xs text-gray-400 px-2 py-1'>
-                                +{tags.length - 3}
-                            </span>
-                        )}
-                    </div>
-                </div>
-            )}
+            {/* タグ表示削除 */}
         </div>
     )
 }

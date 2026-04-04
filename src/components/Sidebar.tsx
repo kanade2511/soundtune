@@ -1,18 +1,11 @@
 import { getLatestArticles } from '@/lib/articles'
 import { Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
-import { SearchBox } from './SearchBox'
-
 const Sidebar = async () => {
     const latest_articles = await getLatestArticles(5)
 
     return (
         <div className='space-y-6'>
-            {/* 検索ボックスカード */}
-            <div className='bg-white rounded-lg shadow-md p-6 mt-14'>
-                <SearchBox variant='sidebar' title='記事を検索' />
-            </div>
-
             <div className='hidden lg:block'>
                 {/* 最新記事カード */}
                 <div className='bg-white rounded-lg shadow-md p-6 sticky top-24'>
@@ -25,11 +18,6 @@ const Sidebar = async () => {
                                 className='block group'
                             >
                                 <div className='border-b border-gray-100 pb-3 last:border-b-0'>
-                                    <div className='flex items-center space-x-2 mb-2'>
-                                        <span className='text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full'>
-                                            {article.category}
-                                        </span>
-                                    </div>
                                     <h4 className='text-sm font-semibold text-gray-800 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2'>
                                         {article.title}
                                     </h4>

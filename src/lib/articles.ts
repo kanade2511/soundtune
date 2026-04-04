@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import matter from 'gray-matter'
-import type { Article, ArticleWithContent, TagInfo } from './types'
+import type { Article, ArticleWithContent } from './types'
 
 const articles_dir = path.join(process.cwd(), 'src', 'notes')
 
@@ -23,11 +23,9 @@ const parse_markdown_file = async (
     const article: Article = {
         slug,
         title: data.title || 'タイトル',
-        category: data.category || '一般',
         description: data.description || '説明文',
         readTime: data.readTime || '5分',
         date: data.date || '2025-07-04',
-        tags: data.tags || [],
         thumbnail: data.thumbnail || undefined,
     }
 
@@ -58,42 +56,8 @@ export const getLatestArticles = async (limit = 5): Promise<Article[]> => {
     return articles.slice(0, limit)
 }
 
-export const getArticlesByTag = async (tag_slug: string): Promise<Article[]> => {
-    const articles = await getAllArticles()
-    const decoded_tag_slug = decodeURIComponent(tag_slug)
+// タグによる記事取得は削除
 
-    return articles.filter(article => article.tags.includes(decoded_tag_slug))
-}
+// 検索機能削除
 
-export const searchArticles = async (query: string): Promise<ArticleWithContent[]> => {
-    const markdown_files = await get_markdown_files()
-    const articles: ArticleWithContent[] = []
-    const search_term = query.toLowerCase()
-
-    for (const filename of markdown_files) {
-        const article = (await parse_markdown_file(filename, true)) as ArticleWithContent
-
-        if (article.title.toLowerCase().includes(search_term)) {
-            articles.push(article)
-        }
-    }
-
-    return articles
-}
-
-export const getAllTags = async (): Promise<TagInfo[]> => {
-    const articles = await getAllArticles()
-    const tag_counts: Record<string, number> = {}
-
-    for (const article of articles) {
-        for (const tag of article.tags) {
-            tag_counts[tag] = (tag_counts[tag] || 0) + 1
-        }
-    }
-
-    return Object.entries(tag_counts).map(([tag, count]) => ({
-        slug: encodeURIComponent(tag),
-        displayName: tag,
-        count,
-    }))
-}
+// タグ一覧取得も削除

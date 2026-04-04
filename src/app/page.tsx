@@ -25,7 +25,7 @@ const Home = async () => {
             description: get_description(post.content),
             readTime: get_read_time(post.content),
             date: new Date(post.created_at).toLocaleDateString('ja-JP'),
-            thumbnail: undefined,
+            thumbnail: post.thumbnail_url ?? undefined,
         }))
     return (
         <div className='min-h-screen'>

@@ -5,6 +5,7 @@ type PublishedPostRow = {
     title: string
     content: string
     created_at: string
+    thumbnail_url: string | null
     profiles: { account_id: string } | { account_id: string }[] | null
 }
 
@@ -14,13 +15,16 @@ type PublishedPost = {
     content: string
     created_at: string
     account_id: string | null
+    thumbnail_url: string | null
 }
 
 export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
     const supabase = createAdminClient()
     const { data, error } = await supabase
         .from('posts')
-        .select('article_id, title, content, created_at, profiles:profiles!author_id (account_id)')
+        .select(
+            'article_id, title, content, created_at, thumbnail_url, profiles:profiles!author_id (account_id)',
+        )
         .eq('published', true)
         .eq('approval_status', 'approved')
         .order('created_at', { ascending: false })
@@ -37,6 +41,7 @@ export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
             content: post.content,
             created_at: post.created_at,
             account_id: profile?.account_id ?? null,
+            thumbnail_url: post.thumbnail_url,
         }
     })
 }

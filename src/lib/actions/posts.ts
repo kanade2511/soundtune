@@ -24,6 +24,8 @@ export async function createPost(
 ): Promise<ActionState> {
     const title = String(formData.get('title') ?? '').trim()
     const content = String(formData.get('content') ?? '').trim()
+    const thumbnail_url_raw = String(formData.get('thumbnailUrl') ?? '').trim()
+    const thumbnail_url = thumbnail_url_raw || null
 
     if (!title || !content) {
         return { error: 'タイトルと本文は必須です' }
@@ -47,6 +49,7 @@ export async function createPost(
             preview_token,
             title,
             content,
+            thumbnail_url,
             published: false,
             approval_status: 'pending',
         })

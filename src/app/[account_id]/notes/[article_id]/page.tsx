@@ -1,5 +1,6 @@
 import { ArrowLeft, Calendar, Clock } from 'lucide-react'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -40,7 +41,7 @@ const ArticlePage = async ({ params }: PageProps) => {
     const { data: post } = await supabase
         .from('posts')
         .select(
-            'article_id, title, content, created_at, approval_status, profiles!author_id (display_name, account_id)',
+            'article_id, title, content, created_at, thumbnail_url, approval_status, profiles!author_id (display_name, account_id)',
         )
         .eq('article_id', article_id)
         .single()
@@ -69,6 +70,18 @@ const ArticlePage = async ({ params }: PageProps) => {
                     <h1 className='text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight'>
                         {post.title}
                     </h1>
+
+                    {post.thumbnail_url && (
+                        <div className='relative mb-6 aspect-[16/9] w-full overflow-hidden rounded-lg border border-gray-200 bg-gray-50'>
+                            <Image
+                                src={post.thumbnail_url}
+                                alt={post.title}
+                                fill
+                                className='object-cover'
+                                sizes='(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 768px'
+                            />
+                        </div>
+                    )}
 
                     <div className='flex items-center space-x-6 text-sm text-gray-500 border-b border-gray-200 pb-6'>
                         <div className='flex items-center space-x-2'>

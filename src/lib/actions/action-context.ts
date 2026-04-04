@@ -1,0 +1,42 @@
+import { createClient } from '@/lib/supabase/server'
+
+export type ActionError = { error: string }
+
+type AuthResult = { userId: string }
+
+type AccountResult = { accountId: string }
+
+export const isActionError = (value: unknown): value is ActionError => {
+    return !!value && typeof value === 'object' && 'error' in value
+}
+
+export const getAuthenticatedUserId = async (): Promise<AuthResult | ActionError> => {
+    const supabase = await createClient()
+    const { data, error } = await supabase.auth.getUser()
+
+    if (error || !data.user) {
+        return { error: 'ログインが必要です' }
+    }
+
+    return { userId: data.user.id }
+}
+
+export const getCurrentUserAccountId = async (): Promise<AccountResult | ActionError> => {
+    const auth = await getAuthenticatedUserId()
+    if (isActionError(auth)) {
+        return auth
+    }
+
+    const supabase = await createClient()
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('account_id')
+        .eq('id', auth.userId)
+        .single()
+
+    if (error || !data) {
+        return { error: 'プロフィールが見つかりません' }
+    }
+
+    return { accountId: data.account_id }
+}

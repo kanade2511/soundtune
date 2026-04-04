@@ -76,6 +76,7 @@ const Header = () => {
                     <div className='flex items-center space-x-4'>
                         {is_logged_in ? (
                             <button
+                                type='button'
                                 onClick={handle_logout}
                                 className='hidden md:inline-flex rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50'
                             >

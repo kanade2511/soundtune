@@ -5,8 +5,7 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "biomejs.biome",
     "editor.codeActionsOnSave": {
-        "quickfix.biome": "explicit",
-        "source.organizeImports.biome": "explicit"
+        "source.fixAll.biome": "explicit"
     },
     "files.exclude": {
         // git, package manager
@@ -17,15 +16,12 @@
         ".next": true,
         ".vercel": true,
         // develop, config
-        "biome.json": true,
+        // "biome.json": true,
         "next-env.d.ts": true,
         "postcss.config.*": true,
         "components.json": true
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "biomejs.biome"
-    },
-    "[markdown]": {
-        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
     }
 }

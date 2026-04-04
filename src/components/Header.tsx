@@ -7,10 +7,10 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 const Header = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [is_menu_open, set_is_menu_open] = useState(false)
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen)
+    const toggle_menu = () => {
+        set_is_menu_open(!is_menu_open)
     }
 
     return (
@@ -21,7 +21,7 @@ const Header = () => {
                         <Link href='/' className='flex items-center'>
                             {/* Desktop Logo */}
                             <Image
-                                src='/images/logo/logo_normal.png'
+                                src='/logo/logo_normal.png'
                                 alt='SoundTune'
                                 height={1024}
                                 width={1024}
@@ -30,7 +30,7 @@ const Header = () => {
                             />
                             {/* Mobile Logo */}
                             <Image
-                                src='/images/logo/logo_small.png'
+                                src='/logo/logo_small.png'
                                 alt='SoundTune'
                                 height={256}
                                 width={256}
@@ -47,7 +47,7 @@ const Header = () => {
                         </div>
                         {/* モバイルでのみハンバーガーメニューを表示 */}
                         <div className='md:hidden relative'>
-                            <HamburgerMenu isOpen={isMenuOpen} onToggle={toggleMenu} />
+                            <HamburgerMenu isOpen={is_menu_open} onToggle={toggle_menu} />
                         </div>
                     </div>
                 </div>

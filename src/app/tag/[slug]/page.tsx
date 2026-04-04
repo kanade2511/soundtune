@@ -7,7 +7,7 @@ import Link from 'next/link'
 const TagPage = async ({ params }: PageProps) => {
     const { slug } = await params
     const articles = await getArticlesByTag(slug)
-    const tagDisplayName = decodeURIComponent(slug)
+    const tag_display_name = decodeURIComponent(slug)
 
     return (
         <div className='min-h-screen'>
@@ -17,12 +17,12 @@ const TagPage = async ({ params }: PageProps) => {
                     <div className='flex items-center space-x-2 mb-4'>
                         <Tag className='h-6 w-6 text-blue-600' />
                         <span className='inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full'>
-                            {tagDisplayName}
+                            {tag_display_name}
                         </span>
                     </div>
 
                     <h1 className='text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight'>
-                        「{tagDisplayName}」の記事
+                        「{tag_display_name}」の記事
                     </h1>
 
                     <p className='text-xl text-gray-600 mb-6'>

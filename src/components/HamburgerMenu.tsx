@@ -13,7 +13,7 @@ interface HamburgerMenuProps {
 
 const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
     // 検索ボックスのrefを作成
-    const searchInputRef = useRef<HTMLInputElement>(null)
+    const search_input_ref = useRef<HTMLInputElement>(null)
 
     // メニューが開いているときは背景のスクロールを無効にする
     useEffect(() => {
@@ -33,20 +33,20 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
     useEffect(() => {
         if (!isOpen) return
 
-        const handleKeyDown = (e: KeyboardEvent) => {
+        const handle_key_down = (e: KeyboardEvent) => {
             if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
                 e.preventDefault()
-                searchInputRef.current?.focus()
+                search_input_ref.current?.focus()
             }
         }
 
-        document.addEventListener('keydown', handleKeyDown)
+        document.addEventListener('keydown', handle_key_down)
         return () => {
-            document.removeEventListener('keydown', handleKeyDown)
+            document.removeEventListener('keydown', handle_key_down)
         }
     }, [isOpen])
 
-    const menuItems = [
+    const menu_items = [
         { href: '/', label: 'ホーム' },
         { href: '/notes', label: '記事一覧' },
         { href: '/tag', label: 'タグ一覧' },
@@ -102,7 +102,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                                         <div className='max-w-[270px] sm:max-w-[320px] md:max-w-[360px] w-full mx-auto'>
                                             <div className='relative aspect-[9/2] w-full'>
                                                 <Image
-                                                    src='/images/logo/logo_normal.png'
+                                                    src='/logo/logo_normal.png'
                                                     alt='SoundTune'
                                                     fill
                                                     className='object-contain'
@@ -118,7 +118,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                                 <div className='px-4 w-full mx-auto'>
                                     <div className='max-w-[270px] sm:max-w-[320px] md:max-w-[360px] w-full mx-auto'>
                                         <SearchBox
-                                            ref={searchInputRef}
+                                            ref={search_input_ref}
                                             variant={isMobile ? 'hamburgerMenu' : 'sidebar'}
                                             title=''
                                             onSearch={onToggle} // 検索時にメニューを閉じる
@@ -128,7 +128,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
                             </div>
 
                             <ul className='space-y-0 mt-10'>
-                                {menuItems.map((item, index) => (
+                                {menu_items.map((item, index) => (
                                     <li
                                         key={item.href}
                                         className={`text-center overflow-hidden pb-[3px] ${

@@ -13,16 +13,16 @@ interface SearchBoxProps {
 
 export const SearchBox = forwardRef<HTMLInputElement, SearchBoxProps>(
     ({ variant = 'header', title, onSearch }, ref) => {
-        const [searchQuery, setSearchQuery] = useState('')
+        const [search_query, set_search_query] = useState('')
         const router = useRouter()
-        const internalRef = useRef<HTMLInputElement>(null)
-        const searchInputRef = (ref as React.RefObject<HTMLInputElement>) || internalRef
+        const internal_ref = useRef<HTMLInputElement>(null)
+        const search_input_ref = (ref as React.RefObject<HTMLInputElement>) || internal_ref
 
-        const handleSearch = (e: React.FormEvent) => {
+        const handle_search = (e: React.FormEvent) => {
             e.preventDefault()
-            if (searchQuery.trim()) {
-                router.push(`/search/${encodeURIComponent(searchQuery.trim())}`)
-                setSearchQuery('')
+            if (search_query.trim()) {
+                router.push(`/search/${encodeURIComponent(search_query.trim())}`)
+                set_search_query('')
                 // 検索実行時にコールバックがあれば実行
                 if (onSearch) {
                     onSearch()
@@ -37,36 +37,36 @@ export const SearchBox = forwardRef<HTMLInputElement, SearchBoxProps>(
                 const down = (e: KeyboardEvent) => {
                     if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
                         e.preventDefault()
-                        searchInputRef.current?.focus()
+                        search_input_ref.current?.focus()
                     }
                 }
                 document.addEventListener('keydown', down)
                 return () => document.removeEventListener('keydown', down)
             }
-        }, [searchInputRef, variant])
+        }, [search_input_ref, variant])
 
         if (variant === 'hamburgerMenu') {
             // ハンバーガーメニュー用のSearchBox（Ctrl+K表示あり）
             return (
                 <div className='w-full'>
                     {title && <h3 className='text-lg font-bold text-gray-800 mb-4'>{title}</h3>}
-                    <form onSubmit={handleSearch} className='w-full'>
+                    <form onSubmit={handle_search} className='w-full'>
                         <div className='relative w-full'>
                             <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
                             <Input
-                                ref={searchInputRef}
+                                ref={search_input_ref}
                                 type='text'
                                 placeholder='記事を検索'
-                                value={searchQuery}
-                                onChange={e => setSearchQuery(e.target.value)}
+                                value={search_query}
+                                onChange={e => set_search_query(e.target.value)}
                                 onKeyDown={e => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault()
-                                        if (searchQuery.trim()) {
+                                        if (search_query.trim()) {
                                             router.push(
-                                                `/search/${encodeURIComponent(searchQuery.trim())}`,
+                                                `/search/${encodeURIComponent(search_query.trim())}`,
                                             )
-                                            setSearchQuery('')
+                                            set_search_query('')
                                             if (onSearch) {
                                                 onSearch()
                                             }
@@ -94,23 +94,23 @@ export const SearchBox = forwardRef<HTMLInputElement, SearchBoxProps>(
             return (
                 <div className='w-full'>
                     {title && <h3 className='text-lg font-bold text-gray-800 mb-4'>{title}</h3>}
-                    <form onSubmit={handleSearch} className='w-full'>
+                    <form onSubmit={handle_search} className='w-full'>
                         <div className='relative w-full'>
                             <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
                             <Input
-                                ref={searchInputRef}
+                                ref={search_input_ref}
                                 type='text'
                                 placeholder='記事を検索'
-                                value={searchQuery}
-                                onChange={e => setSearchQuery(e.target.value)}
+                                value={search_query}
+                                onChange={e => set_search_query(e.target.value)}
                                 onKeyDown={e => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault()
-                                        if (searchQuery.trim()) {
+                                        if (search_query.trim()) {
                                             router.push(
-                                                `/search/${encodeURIComponent(searchQuery.trim())}`,
+                                                `/search/${encodeURIComponent(search_query.trim())}`,
                                             )
-                                            setSearchQuery('')
+                                            set_search_query('')
                                             if (onSearch) {
                                                 onSearch()
                                             }
@@ -127,23 +127,23 @@ export const SearchBox = forwardRef<HTMLInputElement, SearchBoxProps>(
 
         return (
             <div className='hidden md:flex items-center'>
-                <form onSubmit={handleSearch} className='mr-2'>
+                <form onSubmit={handle_search} className='mr-2'>
                     <div className='relative w-64'>
                         <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400' />
                         <Input
-                            ref={searchInputRef}
+                            ref={search_input_ref}
                             type='text'
                             placeholder='記事を検索'
-                            value={searchQuery}
-                            onChange={e => setSearchQuery(e.target.value)}
+                            value={search_query}
+                            onChange={e => set_search_query(e.target.value)}
                             onKeyDown={e => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault()
-                                    if (searchQuery.trim()) {
+                                    if (search_query.trim()) {
                                         router.push(
-                                            `/search/${encodeURIComponent(searchQuery.trim())}`,
+                                            `/search/${encodeURIComponent(search_query.trim())}`,
                                         )
-                                        setSearchQuery('')
+                                        set_search_query('')
                                         if (onSearch) {
                                             onSearch()
                                         }

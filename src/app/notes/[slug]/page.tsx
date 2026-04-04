@@ -23,17 +23,17 @@ interface PageProps {
     params: Promise<{ slug: string }>
 }
 
-const getMarkdownWithMetadata = async (
+const get_markdown_with_metadata = async (
     slug: string,
 ): Promise<{
     content: string
     metadata: PostMetadata
 }> => {
     try {
-        const filePath = path.join(process.cwd(), 'src', 'notes', `${slug}.md`)
-        const fileContent = await fs.readFile(filePath, 'utf8')
+        const file_path = path.join(process.cwd(), 'src', 'notes', `${slug}.md`)
+        const file_content = await fs.readFile(file_path, 'utf8')
 
-        const { data, content } = matter(fileContent)
+        const { data, content } = matter(file_content)
 
         return {
             content,
@@ -53,7 +53,7 @@ const getMarkdownWithMetadata = async (
 
 export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
     const { slug } = await params
-    const { metadata } = await getMarkdownWithMetadata(slug)
+    const { metadata } = await get_markdown_with_metadata(slug)
     return {
         title: `${metadata.title} - SoundTune`,
         description: metadata.description,
@@ -62,7 +62,7 @@ export const generateMetadata = async ({ params }: PageProps): Promise<Metadata>
 
 const Page = async ({ params }: PageProps) => {
     const { slug } = await params
-    const { content, metadata } = await getMarkdownWithMetadata(slug)
+    const { content, metadata } = await get_markdown_with_metadata(slug)
 
     return (
         <div className='min-h-screen'>

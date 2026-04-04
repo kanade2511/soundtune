@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { SearchBox } from './SearchBox'
 
 const Sidebar = async () => {
-    const latestArticles = await getLatestArticles(5)
+    const latest_articles = await getLatestArticles(5)
 
     return (
         <div className='space-y-6'>
@@ -18,7 +18,7 @@ const Sidebar = async () => {
                 <div className='bg-white rounded-lg shadow-md p-6 sticky top-24'>
                     <h3 className='text-xl font-bold text-gray-800 mb-4'>最新記事</h3>
                     <div className='space-y-4'>
-                        {latestArticles.map(article => (
+                        {latest_articles.map(article => (
                             <Link
                                 key={article.slug}
                                 href={`/notes/${article.slug}`}

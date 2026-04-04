@@ -6,8 +6,8 @@ import Link from 'next/link'
 
 const SearchPage = async ({ params }: SearchPageProps) => {
     const { query } = await params
-    const decodedQuery = decodeURIComponent(query)
-    const articles = await searchArticles(decodedQuery)
+    const decoded_query = decodeURIComponent(query)
+    const articles = await searchArticles(decoded_query)
 
     return (
         <div className='min-h-screen'>
@@ -20,7 +20,7 @@ const SearchPage = async ({ params }: SearchPageProps) => {
                     </div>
 
                     <h1 className='text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight'>
-                        「{decodedQuery}」の検索結果
+                        「{decoded_query}」の検索結果
                     </h1>
 
                     <p className='text-xl text-gray-600 mb-6'>
@@ -54,7 +54,7 @@ const SearchPage = async ({ params }: SearchPageProps) => {
                             検索結果が見つかりませんでした
                         </h3>
                         <p className='text-gray-500 mb-6'>
-                            「{decodedQuery}」に関する記事は見つかりませんでした。
+                            「{decoded_query}」に関する記事は見つかりませんでした。
                             <br />
                             別のキーワードで検索してみてください。
                         </p>

@@ -16,7 +16,7 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
         <nav className='flex items-center space-x-2 text-sm text-gray-500 mb-6'>
             <Link href='/' className='flex items-center hover:text-gray-700 transition-colors'>
                 <Image
-                    src='/images/logo/logo_small.png'
+                    src='/logo/logo_small.png'
                     alt='SoundTune'
                     width={32}
                     height={32}
@@ -24,8 +24,8 @@ const Breadcrumb = ({ items }: BreadcrumbProps) => {
                     priority
                 />
             </Link>
-            {items.map((item, index) => (
-                <div key={`${item.label}-${index}`} className='flex items-center space-x-2'>
+            {items.map((item, _) => (
+                <div key={`${item.label}`} className='flex items-center space-x-2'>
                     <ChevronRight className='h-4 w-4' />
                     {item.href ? (
                         <Link

@@ -6,12 +6,12 @@ import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
 
-const geistSans = Geist({
+const geist_sans = Geist({
     variable: '--font-geist-sans',
     subsets: ['latin'],
 })
 
-const geistMono = Geist_Mono({
+const geist_mono = Geist_Mono({
     variable: '--font-geist-mono',
     subsets: ['latin'],
 })
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     title: 'SoundTune',
     // description: '',
     icons: {
-        icon: '/images/logo/favicon.png',
-        apple: '/images/logo/apple-touch-icon.png',
+        icon: '/logo/favicon.png',
+        apple: '/logo/apple-touch-icon.png',
     },
     appleWebApp: {
         title: 'SoundTune',
@@ -35,7 +35,7 @@ const RootLayout = ({
 }>) => {
     return (
         <html lang='ja'>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <body className={`${geist_sans.variable} ${geist_mono.variable} antialiased`}>
                 <div className='background bg-gradient-to-br from-blue-100 via-white to-indigo-100'>
                     <Header />
                     <div className='container mx-auto px-4 py-8'>

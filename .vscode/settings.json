@@ -16,7 +16,7 @@
         ".next": true,
         ".vercel": true,
         // develop, config
-        // "biome.json": true,
+        "biome.json": true,
         "next-env.d.ts": true,
         "postcss.config.*": true,
         "components.json": true

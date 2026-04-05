@@ -57,7 +57,7 @@ export async function updateUserRole(
         return { error: error.message ?? '権限更新に失敗しました' }
     }
 
-    revalidatePath('/admin/control_console')
+    revalidatePath('/admin/console')
     return { role }
 }
 
@@ -100,6 +100,6 @@ export async function deleteUser(
         return { error: error.message ?? 'ユーザー削除に失敗しました' }
     }
 
-    revalidatePath('/admin/control_console')
+    revalidatePath('/admin/console')
     return {}
 }

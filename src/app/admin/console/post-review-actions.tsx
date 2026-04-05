@@ -41,7 +41,7 @@ const approvePost = async (formData: FormData) => {
         .update({ approval_status: 'approved', published: true })
         .eq('article_id', articleId)
 
-    revalidatePath('/admin/review')
+    revalidatePath('/admin/console')
 }
 
 const rejectPost = async (formData: FormData) => {
@@ -60,7 +60,7 @@ const rejectPost = async (formData: FormData) => {
         .update({ approval_status: 'rejected', published: false })
         .eq('article_id', articleId)
 
-    revalidatePath('/admin/review')
+    revalidatePath('/admin/console')
 }
 
 const PostReviewActions = ({ articleId }: ReviewActionsProps) => {

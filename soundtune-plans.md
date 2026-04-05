@@ -24,7 +24,7 @@
 ## Stage 4 ロール設定と承認フロー
 - admin/memberのロールを割り当て
 - 記事公開時の承認ロジックを実装
-- adminの管理ページの作成 → /admin/control_console, /admin/review
+- adminの管理ページの作成 → /admin/console
 - プレビュー用限定公開URLの発行 → /preview?article=[preview_token]
 
 ## Stage 5 エディター改良・md対応
@@ -50,6 +50,3 @@
 - 管理者ページのUX改善
 - レビュー/コンソール導線の改善
 - 管理画面の可読性と操作性改善
-
-## 問題点
-rejectedを削除するか保持するか

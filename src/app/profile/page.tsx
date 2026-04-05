@@ -32,7 +32,7 @@ const ProfilePage = async () => {
                 {profile.avatar_url ? (
                     <Image
                         src={profile.avatar_url}
-                        alt={profile.display_name}
+                        alt={profile.display_name ?? 'avatar'}
                         width={64}
                         height={64}
                         className='h-16 w-16 rounded-full object-cover'
@@ -48,7 +48,11 @@ const ProfilePage = async () => {
                 </div>
             </div>
 
-            <ProfileForm displayName={profile.display_name} accountId={profile.account_id} />
+            <ProfileForm
+                displayName={profile.display_name}
+                accountId={profile.account_id}
+                avatarUrl={profile.avatar_url}
+            />
             <DeleteAccountForm />
         </div>
     )

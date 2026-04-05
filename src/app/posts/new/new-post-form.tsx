@@ -41,6 +41,20 @@ const NewPostForm = () => {
         setUploading(true)
         setUploadError(null)
 
+        // 旧サムネイル画像がthumbnailsバケットのものであれば削除
+        if (thumbnailUrl && thumbnailUrl.includes('/storage/v1/object/public/thumbnails/')) {
+            try {
+                const url = new URL(thumbnailUrl)
+                const pathParts = url.pathname.split('/thumbnails/')
+                if (pathParts.length === 2) {
+                    const oldFilePath = decodeURIComponent(pathParts[1])
+                    await supabase.storage.from('thumbnails').remove([oldFilePath])
+                }
+            } catch (e) {
+                // 削除失敗は致命的でないので無視
+            }
+        }
+
         const extension = file.name.split('.').pop()?.toLowerCase() ?? 'png'
         const fileId =
             globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`.replace('.', '')

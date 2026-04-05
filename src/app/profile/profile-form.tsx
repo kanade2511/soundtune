@@ -54,6 +54,21 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
             return
         }
 
+        // 旧アバター画像がavatarsバケットのものであれば削除
+        if (currentAvatarUrl && currentAvatarUrl.includes('/storage/v1/object/public/avatars/')) {
+            try {
+                // パス部分だけ抽出
+                const url = new URL(currentAvatarUrl)
+                const pathParts = url.pathname.split('/avatars/')
+                if (pathParts.length === 2) {
+                    const oldFilePath = decodeURIComponent(pathParts[1])
+                    await supabase.storage.from('avatars').remove([oldFilePath])
+                }
+            } catch (e) {
+                // 削除失敗は致命的でないので無視
+            }
+        }
+
         const extension = file.name.split('.').pop()?.toLowerCase() ?? 'png'
         const fileId =
             globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`.replace('.', '')

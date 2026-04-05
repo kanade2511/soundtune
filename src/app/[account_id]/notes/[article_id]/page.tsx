@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import Breadcrumb from '@/components/Breadcrumb'
+import { format_read_time } from '@/lib/read-time'
 import { createAdminClient } from '@/lib/supabase/server'
 import './article.css'
 
@@ -41,7 +42,7 @@ const ArticlePage = async ({ params }: PageProps) => {
     const { data: post } = await supabase
         .from('posts')
         .select(
-            'article_id, title, content, created_at, thumbnail_url, approval_status, profiles!author_id (display_name, account_id)',
+            'article_id, title, content, created_at, read_time, thumbnail_url, approval_status, profiles!author_id (display_name, account_id)',
         )
         .eq('article_id', article_id)
         .single()
@@ -90,7 +91,7 @@ const ArticlePage = async ({ params }: PageProps) => {
                         </div>
                         <div className='flex items-center space-x-2'>
                             <Clock className='h-4 w-4' />
-                            <span>5分で読めます</span>
+                            <span>{format_read_time(post.read_time)}で読めます</span>
                         </div>
                     </div>
                 </div>

@@ -1,13 +1,8 @@
 import Card from '@/components/Card'
 import { getPublishedPosts } from '@/lib/articles'
+import { format_read_time } from '@/lib/read-time'
 
 export const dynamic = 'force-dynamic'
-
-const get_read_time = (content: string) => {
-    const length = content.replace(/\s+/g, '').length
-    const minutes = Math.max(1, Math.ceil(length / 500))
-    return `${minutes}分`
-}
 
 const get_description = (content: string) => {
     const normalized = content.replace(/\s+/g, ' ').trim()
@@ -23,7 +18,7 @@ const Home = async () => {
             href: `/${post.account_id}/notes/${post.article_id}`,
             title: post.title,
             description: get_description(post.content),
-            readTime: get_read_time(post.content),
+            readTime: format_read_time(post.read_time),
             date: new Date(post.created_at).toLocaleDateString('ja-JP'),
             thumbnail: post.thumbnail_url ?? undefined,
         }))

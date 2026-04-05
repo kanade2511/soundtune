@@ -1,14 +1,9 @@
 import Link from 'next/link'
+import { format_read_time } from '@/lib/read-time'
 import { createAdminClient } from '@/lib/supabase/server'
 
 interface PageProps {
     params: Promise<{ account_id: string }>
-}
-
-const get_read_time = (content: string) => {
-    const length = content.replace(/\s+/g, '').length
-    const minutes = Math.max(1, Math.ceil(length / 500))
-    return `${minutes}分`
 }
 
 const AccountNotesPage = async ({ params }: PageProps) => {
@@ -31,7 +26,7 @@ const AccountNotesPage = async ({ params }: PageProps) => {
 
     const { data: notes } = await supabase
         .from('posts')
-        .select('article_id, title, content, created_at')
+        .select('article_id, title, content, created_at, read_time')
         .eq('author_id', profile.id)
         .eq('published', true)
         .eq('approval_status', 'approved')
@@ -73,7 +68,7 @@ const AccountNotesPage = async ({ params }: PageProps) => {
                                             {new Date(note.created_at).toLocaleDateString('ja-JP')}
                                         </span>
                                         <span>•</span>
-                                        <span>{get_read_time(note.content)}</span>
+                                        <span>{format_read_time(note.read_time)}</span>
                                     </div>
                                 </div>
                             </Link>

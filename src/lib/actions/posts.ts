@@ -8,6 +8,7 @@ import {
     isActionError,
 } from '@/lib/actions/action-context'
 import { isValidArticleId } from '@/lib/article-id'
+import { set_read_time } from '@/lib/read-time'
 import { createAdminClient } from '@/lib/supabase/server'
 
 type ActionState = {
@@ -40,6 +41,7 @@ export async function createPost(
 
     const article_id = generate_id(14)
     const preview_token = generate_id(24)
+    const read_time = set_read_time(content)
 
     const { data, error } = await supabase
         .from('posts')
@@ -49,6 +51,7 @@ export async function createPost(
             preview_token,
             title,
             content,
+            read_time,
             thumbnail_url,
             published: false,
             approval_status: 'pending',
@@ -85,6 +88,7 @@ export async function updatePost(
     }
 
     const admin = createAdminClient()
+    const read_time = set_read_time(content)
     const { data: post } = await admin
         .from('posts')
         .select('author_id')
@@ -97,7 +101,7 @@ export async function updatePost(
 
     const { error } = await admin
         .from('posts')
-        .update({ title, content })
+        .update({ title, content, read_time })
         .eq('article_id', article_id)
 
     if (error) {

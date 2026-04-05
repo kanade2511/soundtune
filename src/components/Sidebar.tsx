@@ -1,12 +1,7 @@
 import { Calendar, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { getLatestPublishedPosts } from '@/lib/articles'
-
-const get_read_time = (content: string) => {
-    const length = content.replace(/\s+/g, '').length
-    const minutes = Math.max(1, Math.ceil(length / 500))
-    return `${minutes}分`
-}
+import { format_read_time } from '@/lib/read-time'
 
 const format_date = (value: string) => {
     return new Date(value).toLocaleDateString('ja-JP')
@@ -41,7 +36,7 @@ const Sidebar = async () => {
                                             </div>
                                             <div className='flex items-center space-x-1'>
                                                 <Clock className='h-3 w-3' />
-                                                <span>{get_read_time(article.content)}</span>
+                                                <span>{format_read_time(article.read_time)}</span>
                                             </div>
                                         </div>
                                     </div>

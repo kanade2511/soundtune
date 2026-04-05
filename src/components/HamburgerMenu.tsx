@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 
 interface HamburgerMenuProps {
     isOpen: boolean
@@ -10,9 +10,6 @@ interface HamburgerMenuProps {
 }
 
 const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
-    // 検索ボックスのrefを作成
-    const search_input_ref = useRef<HTMLInputElement>(null)
-
     // メニューが開いているときは背景のスクロールを無効にする
     useEffect(() => {
         if (isOpen) {
@@ -27,34 +24,19 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
         }
     }, [isOpen])
 
-    // メニューが開いているときにCtrl+Kで検索ボックスにフォーカス
-    useEffect(() => {
-        if (!isOpen) return
-
-        const handle_key_down = (e: KeyboardEvent) => {
-            if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
-                e.preventDefault()
-                search_input_ref.current?.focus()
-            }
-        }
-
-        document.addEventListener('keydown', handle_key_down)
-        return () => {
-            document.removeEventListener('keydown', handle_key_down)
-        }
-    }, [isOpen])
-
     const menu_items = [{ href: '/', label: 'ホーム' }]
 
     return (
         <>
             {/* ハンバーガーメニューボタン */}
-            <div className='fixed top-5 right-8 z-50 w-10 h-10 flex items-center justify-center'>
+            <div className='relative z-50 flex h-9 w-9 items-center justify-center sm:h-10 sm:w-10'>
                 <button
                     type='button'
                     onClick={onToggle}
-                    className='flex flex-col items-center justify-center w-full h-full focus:outline-none p-1 group transition-colors duration-200'
+                    className='group flex h-full w-full flex-col items-center justify-center rounded-md bg-white/90 p-1 transition-colors duration-200 hover:bg-white focus:outline-none'
                     aria-label='メニューを開く'
+                    aria-expanded={isOpen}
+                    aria-controls='global-menu-panel'
                 >
                     <div className='relative w-6 h-6 flex flex-col justify-center items-center'>
                         {/* 1本目の線 */}
@@ -81,6 +63,7 @@ const HamburgerMenu = ({ isOpen, onToggle }: HamburgerMenuProps) => {
 
             {/* 全画面メニュー */}
             <div
+                id='global-menu-panel'
                 className={`fixed inset-0 w-full h-screen bg-gradient-to-br from-blue-100 via-white to-indigo-100 transition-all duration-300 ease-[cubic-bezier(0.11,0.24,0.64,1)] ${
                     isOpen ? 'z-40 opacity-100 visible' : '-z-10 opacity-0 invisible'
                 }`}

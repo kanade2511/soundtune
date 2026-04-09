@@ -7,7 +7,10 @@ type PublishedPostRow = {
     created_at: string
     read_time: number
     thumbnail_url: string | null
-    profiles: { account_id: string } | { account_id: string }[] | null
+    profiles:
+        | { account_id: string; display_name: string | null }
+        | { account_id: string; display_name: string | null }[]
+        | null
 }
 
 type PublishedPost = {
@@ -17,6 +20,7 @@ type PublishedPost = {
     created_at: string
     read_time: number
     account_id: string | null
+    display_name: string | null
     thumbnail_url: string | null
 }
 
@@ -25,7 +29,7 @@ export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
     const { data, error } = await supabase
         .from('posts')
         .select(
-            'article_id, title, content, created_at, read_time, thumbnail_url, profiles:profiles!author_id (account_id)',
+            'article_id, title, content, created_at, read_time, thumbnail_url, profiles:profiles!author_id (account_id, display_name)',
         )
         .eq('published', true)
         .eq('approval_status', 'approved')
@@ -44,6 +48,7 @@ export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
             created_at: post.created_at,
             read_time: post.read_time,
             account_id: profile?.account_id ?? null,
+            display_name: profile?.display_name ?? null,
             thumbnail_url: post.thumbnail_url,
         }
     })

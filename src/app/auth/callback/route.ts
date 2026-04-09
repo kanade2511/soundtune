@@ -17,6 +17,13 @@ const get_avatar_extension = (contentType: string | null, url: string) => {
     return match ? match[1].toLowerCase().replace('jpeg', 'jpg') : 'png'
 }
 
+const get_safe_next_path = (value: string | null) => {
+    if (!value) return '/'
+    if (!value.startsWith('/')) return '/'
+    if (value.startsWith('//')) return '/'
+    return value
+}
+
 const upload_avatar = async (
     admin: ReturnType<typeof createAdminClient>,
     userId: string,
@@ -49,9 +56,10 @@ const upload_avatar = async (
 export async function GET(request: Request) {
     const url = new URL(request.url)
     const code = url.searchParams.get('code')
+    const next_path = get_safe_next_path(url.searchParams.get('next'))
 
     if (code) {
-        const response = NextResponse.redirect(new URL('/', url.origin))
+        const response = NextResponse.redirect(new URL(next_path, url.origin))
 
         const supabase = createServerClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',

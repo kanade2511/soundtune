@@ -20,6 +20,10 @@ type UserAdminRowProps = {
 
 const initial_state: ActionState = {}
 
+const get_role_label = (role: 'member' | 'admin') => {
+    return role === 'admin' ? '管理者' : 'メンバー'
+}
+
 const SubmitButton = ({ label }: { label: string }) => {
     const { pending } = useFormStatus()
     return (
@@ -76,7 +80,7 @@ const UserAdminRow = ({
                     <div className='flex items-center gap-2'>
                         <p className='text-base font-semibold text-gray-800'>{displayName}</p>
                         <span className='rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-600'>
-                            {currentRole}
+                            {get_role_label(currentRole)}
                         </span>
                         {isSelf ? (
                             <span className='rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700'>
@@ -101,8 +105,8 @@ const UserAdminRow = ({
                             }
                             className='rounded-md border border-gray-200 bg-white px-2 py-2 text-xs text-gray-700'
                         >
-                            <option value='member'>member</option>
-                            <option value='admin'>admin</option>
+                            <option value='member'>メンバー</option>
+                            <option value='admin'>管理者</option>
                         </select>
                         <SubmitButton label='権限更新' />
                     </form>

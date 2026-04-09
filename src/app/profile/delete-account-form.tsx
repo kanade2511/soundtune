@@ -8,6 +8,10 @@ type ActionState = {
     error?: string
 }
 
+type DeleteAccountFormProps = {
+    accountId: string
+}
+
 const initial_state: ActionState = {}
 
 const DeleteButton = () => {
@@ -23,7 +27,7 @@ const DeleteButton = () => {
     )
 }
 
-const DeleteAccountForm = () => {
+const DeleteAccountForm = ({ accountId }: DeleteAccountFormProps) => {
     const [state, formAction] = useActionState(deleteAccount, initial_state)
 
     return (
@@ -34,12 +38,13 @@ const DeleteAccountForm = () => {
             <div className='space-y-2'>
                 <h2 className='text-sm font-semibold text-red-700'>アカウント削除</h2>
                 <p className='text-xs text-red-600'>
-                    削除すると投稿も含めて復元できません。確認のため delete と入力してください。
+                    削除すると投稿も含めて復元できません。確認のため {accountId}{' '}
+                    と入力してください。
                 </p>
                 <input
                     name='confirmation'
                     type='text'
-                    placeholder='delete'
+                    placeholder={accountId}
                     className='w-full rounded-md border border-red-200 px-3 py-2 text-sm shadow-sm'
                 />
             </div>

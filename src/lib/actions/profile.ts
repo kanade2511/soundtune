@@ -58,15 +58,28 @@ export async function deleteAccount(
     _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
-    const confirmation = String(formData.get('confirmation') ?? '').trim()
-
-    if (confirmation !== 'delete') {
-        return { error: '確認のため delete と入力してください' }
-    }
+    const confirmation = String(formData.get('confirmation') ?? '')
+        .trim()
+        .toLowerCase()
 
     const auth = await getAuthenticatedUserId()
     if (isActionError(auth)) {
         return auth
+    }
+
+    const supabase = await createClient()
+    const { data: profile, error: profile_error } = await supabase
+        .from('profiles')
+        .select('account_id')
+        .eq('id', auth.userId)
+        .single()
+
+    if (profile_error || !profile) {
+        return { error: 'プロフィールが見つかりません' }
+    }
+
+    if (confirmation !== profile.account_id) {
+        return { error: `確認のため ${profile.account_id} と入力してください` }
     }
 
     const admin = createAdminClient()

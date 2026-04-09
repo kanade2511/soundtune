@@ -15,8 +15,7 @@ interface CardProps {
 
 const Card = ({ title, description, readTime, date, thumbnail, href }: CardProps) => {
     return (
-        <div className='bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden'>
-            {' '}
+        <div className='h-full w-full overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-lg'>
             <Link href={href} className='block'>
                 {/* 画像エリア */}
                 <div className='relative h-48'>

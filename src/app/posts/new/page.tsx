@@ -1,22 +1,10 @@
-import { createServerClient } from '@supabase/ssr'
-import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
 import NewPostForm from './new-post-form'
 
-const build_cookie_list = (cookieHeader: string | null) => {
-    return (
-        cookieHeader?.split(';').map(cookie => {
-            const [name, ...rest] = cookie.trim().split('=')
-            return { name, value: rest.join('=') }
-        }) ?? []
-    )
-}
-
 const NewPostPage = async () => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
-    const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY ?? ''
-
-    if (!url || !key) {
+    const supabase = await createClient().catch(() => null)
+    if (!supabase) {
         return (
             <div className='rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700'>
                 Supabaseの環境変数が未設定です
@@ -24,30 +12,9 @@ const NewPostPage = async () => {
         )
     }
 
-    const cookieStore = await cookies()
-    const headerList = await headers()
-    const cookieHeader = headerList.get('cookie')
-
-    const supabase = createServerClient(url, key, {
-        cookies: {
-            getAll() {
-                if (typeof cookieStore.getAll === 'function') {
-                    return cookieStore.getAll()
-                }
-
-                return build_cookie_list(cookieHeader)
-            },
-            setAll(cookiesToSet) {
-                cookiesToSet.forEach(({ name, value, options }) => {
-                    cookieStore.set(name, value, options)
-                })
-            },
-        },
-    })
-
     const { data } = await supabase.auth.getUser()
     if (!data.user) {
-        redirect('/auth/login')
+        redirect('/auth/login?next=/posts/new')
     }
 
     return (

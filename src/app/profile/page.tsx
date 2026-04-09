@@ -53,7 +53,7 @@ const ProfilePage = async () => {
                 accountId={profile.account_id}
                 avatarUrl={profile.avatar_url}
             />
-            <DeleteAccountForm />
+            <DeleteAccountForm accountId={profile.account_id} />
         </div>
     )
 }

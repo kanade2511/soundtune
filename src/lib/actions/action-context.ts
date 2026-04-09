@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
 export type ActionError = { error: string }
@@ -19,6 +20,37 @@ export const getAuthenticatedUserId = async (): Promise<AuthResult | ActionError
     }
 
     return { userId: data.user.id }
+}
+
+export const requireAuthenticatedUserId = async (
+    login_path = '/auth/login',
+): Promise<AuthResult> => {
+    const auth = await getAuthenticatedUserId()
+    if (isActionError(auth)) {
+        redirect(login_path)
+    }
+
+    return auth
+}
+
+export const requireAdminUserId = async (
+    login_path = '/auth/login',
+    forbidden_path = '/',
+): Promise<AuthResult> => {
+    const auth = await requireAuthenticatedUserId(login_path)
+
+    const supabase = await createClient()
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', auth.userId)
+        .single()
+
+    if (!profile || profile.role !== 'admin') {
+        redirect(forbidden_path)
+    }
+
+    return auth
 }
 
 export const getCurrentUserAccountId = async (): Promise<AccountResult | ActionError> => {

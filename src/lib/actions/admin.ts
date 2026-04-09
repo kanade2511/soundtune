@@ -1,8 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUserId, isActionError } from '@/lib/actions/action-context'
+import { requireAdminUserId } from '@/lib/actions/action-context'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 
 type ActionState = {
@@ -10,31 +9,11 @@ type ActionState = {
     role?: 'member' | 'admin'
 }
 
-const ensure_admin = async () => {
-    const auth = await getAuthenticatedUserId()
-    if (isActionError(auth)) {
-        redirect('/auth/login')
-    }
-
-    const authClient = await createClient()
-    const { data: profile } = await authClient
-        .from('profiles')
-        .select('role')
-        .eq('id', auth.userId)
-        .single()
-
-    if (!profile || profile.role !== 'admin') {
-        redirect('/')
-    }
-
-    return auth.userId
-}
-
 export async function updateUserRole(
     _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
-    await ensure_admin()
+    await requireAdminUserId()
 
     const targetUserId = String(formData.get('userId') ?? '').trim()
     const role = String(formData.get('role') ?? '').trim()
@@ -65,7 +44,7 @@ export async function deleteUser(
     _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
-    await ensure_admin()
+    await requireAdminUserId()
 
     const targetUserId = String(formData.get('userId') ?? '').trim()
 

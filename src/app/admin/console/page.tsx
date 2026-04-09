@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation'
-import { getAuthenticatedUserId, isActionError } from '@/lib/actions/action-context'
-import { createAdminClient, createClient } from '@/lib/supabase/server'
+import { requireAdminUserId } from '@/lib/actions/action-context'
+import { createAdminClient } from '@/lib/supabase/server'
 import PostReviewActions from './post-review-actions'
 import UserAdminRow from './user-admin-row'
 
@@ -22,21 +21,7 @@ type PostRow = {
 }
 
 const ConsolePage = async () => {
-    const auth = await getAuthenticatedUserId()
-    if (isActionError(auth)) {
-        redirect('/auth/login')
-    }
-
-    const authClient = await createClient()
-    const { data: profile } = await authClient
-        .from('profiles')
-        .select('role')
-        .eq('id', auth.userId)
-        .single()
-
-    if (!profile || profile.role !== 'admin') {
-        redirect('/')
-    }
+    const { userId } = await requireAdminUserId()
 
     const admin = createAdminClient()
     const { data: users } = await admin
@@ -69,7 +54,7 @@ const ConsolePage = async () => {
             </div>
 
             <div className='rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700'>
-                adminはレビューとユーザー管理が可能です。最後のadminは削除できません。
+                管理者はレビューとユーザー管理が可能です。
             </div>
 
             <section className='space-y-4'>
@@ -141,7 +126,7 @@ const ConsolePage = async () => {
                                 accountId={user.account_id ?? 'unknown'}
                                 role={(user.role ?? 'member') as 'member' | 'admin'}
                                 createdAt={user.created_at}
-                                isSelf={user.id === auth.userId}
+                                isSelf={user.id === userId}
                             />
                         ))}
                     </div>

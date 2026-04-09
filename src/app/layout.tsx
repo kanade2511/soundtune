@@ -4,7 +4,6 @@ import './globals.css'
 
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import Sidebar from '@/components/Sidebar'
 
 const geist_sans = Geist({
     variable: '--font-geist-sans',
@@ -36,14 +35,13 @@ const RootLayout = ({
     return (
         <html lang='ja'>
             <body className={`${geist_sans.variable} ${geist_mono.variable} antialiased`}>
-                <div className='background bg-gradient-to-br from-blue-100 via-white to-indigo-100'>
+                <div className='background flex min-h-screen flex-col bg-gradient-to-br from-blue-100 via-white to-indigo-100'>
                     <Header />
-                    <div className='container mx-auto px-4 py-8'>
-                        <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-                            <div className='lg:col-span-2'>{children}</div>
-                            <Sidebar />
+                    <main className='flex-1'>
+                        <div className='container mx-auto px-6 py-8 sm:px-8 lg:px-12'>
+                            {children}
                         </div>
-                    </div>
+                    </main>
                     <Footer />
                 </div>
             </body>

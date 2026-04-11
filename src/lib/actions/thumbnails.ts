@@ -1,7 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/server'
 
-const THUMBNAIL_BUCKET = 'thumbnails'
-const THUMBNAIL_PUBLIC_PREFIX = '/storage/v1/object/public/thumbnails/'
+const THUMBNAIL_BUCKET = 'Articles'
+const THUMBNAIL_PUBLIC_PREFIX = '/storage/v1/object/public/Articles/'
 
 const dedupe_paths = (paths: string[]) => {
     return Array.from(new Set(paths.filter(Boolean)))

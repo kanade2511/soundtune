@@ -1,12 +1,15 @@
-import crypto from 'node:crypto'
 import { NextResponse } from 'next/server'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 
-const AVATAR_PUBLIC_PREFIX = '/storage/v1/object/public/avatars/'
+const USER_MEDIA_BUCKET = 'Users'
+const AVATAR_PUBLIC_PREFIX = '/storage/v1/object/public/Users/'
+const KNOWN_IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'webp', 'gif'])
 
 const get_extension = (file: File) => {
     const by_name = file.name.split('.').pop()?.toLowerCase()
-    if (by_name) return by_name
+    if (by_name && KNOWN_IMAGE_EXTENSIONS.has(by_name)) {
+        return by_name === 'jpeg' ? 'jpg' : by_name
+    }
 
     if (file.type.includes('png')) return 'png'
     if (file.type.includes('jpeg')) return 'jpg'
@@ -14,6 +17,29 @@ const get_extension = (file: File) => {
     if (file.type.includes('webp')) return 'webp'
     if (file.type.includes('gif')) return 'gif'
     return 'bin'
+}
+
+const get_next_avatar_version = (user_id: string, current_path: string | null) => {
+    if (!current_path) {
+        return 1
+    }
+
+    if (!current_path.startsWith(`${user_id}/`)) {
+        return 1
+    }
+
+    const file_name = current_path.slice(user_id.length + 1)
+    const match = file_name.match(/^avatar-v(\d+)\.[A-Za-z0-9]+$/)
+    if (!match) {
+        return 1
+    }
+
+    const current_version = Number.parseInt(match[1], 10)
+    if (!Number.isFinite(current_version) || current_version < 1) {
+        return 1
+    }
+
+    return current_version + 1
 }
 
 const extract_old_avatar_path = (thumbnail_url: string | null) => {
@@ -41,6 +67,8 @@ export async function POST(request: Request) {
 
     const form_data = await request.formData()
     const file_value = form_data.get('file')
+    const current_path_raw = String(form_data.get('currentPath') ?? '').trim()
+    const current_path = current_path_raw || null
     const old_avatar_url = String(form_data.get('oldAvatarUrl') ?? '').trim() || null
 
     if (!(file_value instanceof File)) {
@@ -48,12 +76,12 @@ export async function POST(request: Request) {
     }
 
     const extension = get_extension(file_value)
-    const file_id = crypto.randomUUID()
-    const file_path = `${user.id}/${file_id}.${extension}`
+    const next_version = get_next_avatar_version(user.id, current_path)
+    const file_path = `${user.id}/avatar-v${next_version}.${extension}`
 
     const admin = createAdminClient()
     const { error } = await admin.storage
-        .from('avatars')
+        .from(USER_MEDIA_BUCKET)
         .upload(file_path, file_value, { upsert: true, contentType: file_value.type })
 
     if (error) {
@@ -63,11 +91,11 @@ export async function POST(request: Request) {
         )
     }
 
-    const old_path = extract_old_avatar_path(old_avatar_url)
+    const old_path = current_path ?? extract_old_avatar_path(old_avatar_url)
     if (old_path?.startsWith(`${user.id}/`) && old_path !== file_path) {
-        void admin.storage.from('avatars').remove([old_path])
+        void admin.storage.from(USER_MEDIA_BUCKET).remove([old_path])
     }
 
-    const { data } = admin.storage.from('avatars').getPublicUrl(file_path)
+    const { data } = admin.storage.from(USER_MEDIA_BUCKET).getPublicUrl(file_path)
     return NextResponse.json({ publicUrl: data.publicUrl, path: file_path })
 }

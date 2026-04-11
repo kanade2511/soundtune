@@ -51,7 +51,8 @@ const extract_thumbnail_path = (thumbnail_url: string | null) => {
 
     try {
         const url = new URL(thumbnail_url)
-        const [, path = ''] = url.pathname.split('/storage/v1/object/public/thumbnails/')
+        const [, path = ''] = url.pathname.split('/storage/v1/object/public/Articles/')
+        if (!path) return ''
         return decodeURIComponent(path)
     } catch {
         return ''
@@ -156,6 +157,7 @@ const EditPostForm = ({
 
             const upload_form_data = new FormData()
             upload_form_data.append('articleId', articleId)
+            upload_form_data.append('currentPath', currentThumbnailPath)
             upload_form_data.append('file', compressed_file)
 
             const response = await with_timeout(

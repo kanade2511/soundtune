@@ -37,16 +37,16 @@ const upload_avatar = async (
         const contentType = response.headers.get('content-type')
         const extension = get_avatar_extension(contentType, url)
         const buffer = Buffer.from(await response.arrayBuffer())
-        const filePath = `${userId}/${crypto.randomBytes(8).toString('hex')}.${extension}`
+        const filePath = `${userId}/avatar-v1.${extension}`
         const { error } = await admin.storage
-            .from('avatars')
+            .from('Users')
             .upload(filePath, buffer, { contentType: contentType ?? 'image/png', upsert: true })
 
         if (error) {
             return null
         }
 
-        const { data } = admin.storage.from('avatars').getPublicUrl(filePath)
+        const { data } = admin.storage.from('Users').getPublicUrl(filePath)
         return data.publicUrl
     } catch {
         return null

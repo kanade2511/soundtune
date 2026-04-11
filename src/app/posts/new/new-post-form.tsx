@@ -120,6 +120,7 @@ const NewPostForm = ({ articleId }: NewPostFormProps) => {
 
             const upload_form_data = new FormData()
             upload_form_data.append('articleId', articleId)
+            upload_form_data.append('currentPath', currentThumbnailPath)
             upload_form_data.append('file', compressed_file)
 
             const response = await with_timeout(

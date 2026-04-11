@@ -42,6 +42,19 @@ const with_timeout = async <T,>(
     })
 }
 
+const extract_avatar_path = (avatar_url: string | null) => {
+    if (!avatar_url) return ''
+
+    try {
+        const url = new URL(avatar_url)
+        const [, path = ''] = url.pathname.split('/storage/v1/object/public/Users/')
+        if (!path) return ''
+        return decodeURIComponent(path)
+    } catch {
+        return ''
+    }
+}
+
 const SubmitButton = ({ uploading }: { uploading: boolean }) => {
     const { pending } = useFormStatus()
     return (
@@ -58,6 +71,7 @@ const SubmitButton = ({ uploading }: { uploading: boolean }) => {
 const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) => {
     const [state, formAction] = useActionState(updateProfile, initial_state)
     const [currentAvatarUrl, setCurrentAvatarUrl] = useState(avatarUrl ?? '')
+    const [currentAvatarPath, setCurrentAvatarPath] = useState(extract_avatar_path(avatarUrl))
     const [uploading, setUploading] = useState(false)
     const [uploadError, setUploadError] = useState<string | null>(null)
 
@@ -75,6 +89,7 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
 
             const upload_form_data = new FormData()
             upload_form_data.append('file', compressed_file)
+            upload_form_data.append('currentPath', currentAvatarPath)
             upload_form_data.append('oldAvatarUrl', currentAvatarUrl)
 
             const response = await with_timeout(
@@ -92,11 +107,16 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
             }
 
             const public_url = String(payload?.publicUrl ?? '')
+            const uploaded_path = String(payload?.path ?? '')
             if (!public_url) {
                 throw new Error('画像URLの取得に失敗しました')
             }
+            if (!uploaded_path) {
+                throw new Error('画像パスの取得に失敗しました')
+            }
 
             setCurrentAvatarUrl(public_url)
+            setCurrentAvatarPath(uploaded_path)
         } catch (error) {
             const message =
                 error instanceof Error ? error.message : '画像アップロードに失敗しました'

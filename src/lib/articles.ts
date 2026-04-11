@@ -1,7 +1,7 @@
 import { createAdminClient } from './supabase/server'
 
 type PublishedPostRow = {
-    article_id: string
+    post_id: string
     title: string
     content: string
     created_at: string
@@ -14,7 +14,7 @@ type PublishedPostRow = {
 }
 
 type PublishedPost = {
-    article_id: string
+    post_id: string
     title: string
     content: string
     created_at: string
@@ -29,7 +29,7 @@ export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
     const { data, error } = await supabase
         .from('posts')
         .select(
-            'article_id, title, content, created_at, read_time, thumbnail_url, profiles:profiles!author_id (account_id, display_name)',
+            'post_id, title, content, created_at, read_time, thumbnail_url, profiles:profiles!author_id (account_id, display_name)',
         )
         .eq('published', true)
         .eq('approval_status', 'approved')
@@ -42,7 +42,7 @@ export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
     return (data ?? []).map((post: PublishedPostRow) => {
         const profile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles
         return {
-            article_id: post.article_id,
+            post_id: post.post_id,
             title: post.title,
             content: post.content,
             created_at: post.created_at,

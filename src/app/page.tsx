@@ -9,8 +9,8 @@ const Home = async () => {
     const cards = posts
         .filter(post => post.account_id)
         .map(post => ({
-            key: post.article_id,
-            href: `/${post.account_id}/notes/${post.article_id}`,
+            key: post.post_id,
+            href: `/${post.account_id}/posts/${post.post_id}`,
             title: post.title,
             description: post.display_name ?? `@${post.account_id}`,
             readTime: format_read_time(post.read_time),
@@ -22,7 +22,7 @@ const Home = async () => {
             {/* Main Content */}
             <main className='py-4 sm:py-8'>
                 <div>
-                    <h3 className='text-2xl font-bold text-gray-800 mb-6'>すべての記事</h3>
+                    <h3 className='text-2xl font-bold text-gray-800 mb-6'>すべての投稿</h3>
                     <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
                         {cards.map(card => (
                             <Card

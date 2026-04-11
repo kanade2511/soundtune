@@ -5,17 +5,17 @@ import { createAdminClient } from '@/lib/supabase/server'
 import EditPostForm from './edit-post-form'
 
 type PageProps = {
-    searchParams: Promise<{ articleId?: string }>
+    searchParams: Promise<{ postId?: string }>
 }
 
 const EditPostPage = async ({ searchParams }: PageProps) => {
     const params = await searchParams
-    const article_id = params.articleId
+    const post_id = params.postId
 
-    if (!article_id || !isValidArticleId(article_id)) {
+    if (!post_id || !isValidArticleId(post_id)) {
         return (
             <div className='rounded-md border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800'>
-                記事IDが不正です
+                投稿IDが不正です
             </div>
         )
     }
@@ -29,13 +29,13 @@ const EditPostPage = async ({ searchParams }: PageProps) => {
     const { data: post } = await admin
         .from('posts')
         .select('title, content, author_id, thumbnail_url')
-        .eq('article_id', article_id)
+        .eq('post_id', post_id)
         .single()
 
     if (!post) {
         return (
             <div className='rounded-md border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800'>
-                記事が見つかりません
+                投稿が見つかりません
             </div>
         )
     }
@@ -51,11 +51,11 @@ const EditPostPage = async ({ searchParams }: PageProps) => {
     return (
         <div className='space-y-6'>
             <div>
-                <h1 className='text-2xl font-bold text-gray-800'>記事を編集</h1>
+                <h1 className='text-2xl font-bold text-gray-800'>投稿を編集</h1>
                 <p className='mt-2 text-sm text-gray-600'>タイトルと本文を更新してください。</p>
             </div>
             <EditPostForm
-                articleId={article_id}
+                postId={post_id}
                 initialTitle={post.title}
                 initialContent={post.content}
                 initialThumbnailUrl={post.thumbnail_url}

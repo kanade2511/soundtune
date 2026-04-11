@@ -19,16 +19,16 @@ const get_extension = (file: File) => {
     return 'bin'
 }
 
-const get_next_thumbnail_version = (article_id: string, current_path: string | null) => {
+const get_next_thumbnail_version = (post_id: string, current_path: string | null) => {
     if (!current_path) {
         return 1
     }
 
-    if (!current_path.startsWith(`${article_id}/`)) {
+    if (!current_path.startsWith(`${post_id}/`)) {
         return 1
     }
 
-    const file_name = current_path.slice(article_id.length + 1)
+    const file_name = current_path.slice(post_id.length + 1)
     const match = file_name.match(/^thumbnail-v(\d+)\.[A-Za-z0-9]+$/)
     if (!match) {
         return 1
@@ -53,13 +53,13 @@ export async function POST(request: Request) {
     }
 
     const form_data = await request.formData()
-    const article_id = String(form_data.get('articleId') ?? '')
+    const post_id = String(form_data.get('postId') ?? '')
     const current_path_raw = String(form_data.get('currentPath') ?? '').trim()
     const current_path = current_path_raw || null
     const file_value = form_data.get('file')
 
-    if (!isValidArticleId(article_id)) {
-        return NextResponse.json({ error: '記事IDが不正です' }, { status: 400 })
+    if (!isValidArticleId(post_id)) {
+        return NextResponse.json({ error: '投稿IDが不正です' }, { status: 400 })
     }
 
     if (!(file_value instanceof File)) {
@@ -67,8 +67,8 @@ export async function POST(request: Request) {
     }
 
     const extension = get_extension(file_value)
-    const next_version = get_next_thumbnail_version(article_id, current_path)
-    const file_path = `${article_id}/thumbnail-v${next_version}.${extension}`
+    const next_version = get_next_thumbnail_version(post_id, current_path)
+    const file_path = `${post_id}/thumbnail-v${next_version}.${extension}`
 
     const admin = createAdminClient()
     const { error } = await admin.storage

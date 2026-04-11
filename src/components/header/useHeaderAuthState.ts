@@ -73,6 +73,12 @@ const useHeaderAuthState = () => {
 
         void load_session()
 
+        const handle_profile_updated = () => {
+            void hydrate_auth_state()
+        }
+
+        window.addEventListener('profile-updated', handle_profile_updated)
+
         const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {
             if (!is_mounted) return
             if (!session) {
@@ -88,6 +94,7 @@ const useHeaderAuthState = () => {
 
         return () => {
             is_mounted = false
+            window.removeEventListener('profile-updated', handle_profile_updated)
             subscription.subscription.unsubscribe()
         }
     }, [clear_profile_state, hydrate_auth_state, load_profile, supabase])

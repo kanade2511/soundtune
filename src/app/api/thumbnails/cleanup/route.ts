@@ -19,14 +19,14 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json().catch(() => null)
-    const article_id = String(body?.articleId ?? '')
+    const post_id = String(body?.postId ?? '')
 
-    if (!isValidArticleId(article_id)) {
+    if (!isValidArticleId(post_id)) {
         return NextResponse.json({ ok: false }, { status: 400 })
     }
 
     const paths = parse_paths(body?.paths)
-    await cleanup_thumbnail_on_create(article_id, paths)
+    await cleanup_thumbnail_on_create(post_id, paths)
 
     return NextResponse.json({ ok: true })
 }

@@ -26,7 +26,7 @@ const AccountNotesPage = async ({ params }: PageProps) => {
 
     const { data: notes } = await supabase
         .from('posts')
-        .select('article_id, title, content, created_at, read_time')
+        .select('post_id, title, content, created_at, read_time')
         .eq('author_id', profile.id)
         .eq('published', true)
         .eq('approval_status', 'approved')
@@ -39,21 +39,21 @@ const AccountNotesPage = async ({ params }: PageProps) => {
             <div className='container mx-auto px-4 py-12'>
                 <div className='mb-8 space-y-2'>
                     <h1 className='text-2xl font-bold text-gray-800'>
-                        {profile.display_name} のノート
+                        {profile.display_name} の投稿
                     </h1>
                     <p className='text-sm text-gray-500'>@{profile.account_id}</p>
                 </div>
 
                 {list.length === 0 ? (
                     <div className='rounded-md border border-gray-200 bg-white p-4 text-sm text-gray-600'>
-                        公開中のノートはありません。
+                        公開中の投稿はありません。
                     </div>
                 ) : (
                     <div className='space-y-4'>
                         {list.map(note => (
                             <Link
-                                key={note.article_id}
-                                href={`/${profile.account_id}/notes/${note.article_id}`}
+                                key={note.post_id}
+                                href={`/${profile.account_id}/posts/${note.post_id}`}
                                 className='block rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition hover:border-blue-200 hover:shadow-md'
                             >
                                 <div className='space-y-2'>

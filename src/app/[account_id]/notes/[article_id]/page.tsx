@@ -16,18 +16,19 @@ interface PageProps {
 
 export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
     const { account_id, article_id } = await params
+    const post_id = article_id
     const supabase = createAdminClient()
 
     const { data: post } = await supabase
         .from('posts')
         .select('title, content, created_at, profiles!author_id (account_id)')
-        .eq('article_id', article_id)
+        .eq('post_id', post_id)
         .single()
 
     const profile = Array.isArray(post?.profiles) ? post?.profiles[0] : post?.profiles
 
     if (!post || profile?.account_id !== account_id) {
-        return { title: '記事が見つかりません - SoundTune' }
+        return { title: '投稿が見つかりません - SoundTune' }
     }
 
     return {
@@ -37,14 +38,15 @@ export const generateMetadata = async ({ params }: PageProps): Promise<Metadata>
 
 const ArticlePage = async ({ params }: PageProps) => {
     const { account_id, article_id } = await params
+    const post_id = article_id
     const supabase = createAdminClient()
 
     const { data: post } = await supabase
         .from('posts')
         .select(
-            'article_id, title, content, created_at, read_time, thumbnail_url, approval_status, author_id, profiles!author_id (display_name, account_id)',
+            'post_id, title, content, created_at, read_time, thumbnail_url, approval_status, author_id, profiles!author_id (display_name, account_id)',
         )
-        .eq('article_id', article_id)
+        .eq('post_id', post_id)
         .single()
 
     const profile = Array.isArray(post?.profiles) ? post?.profiles[0] : post?.profiles
@@ -52,7 +54,7 @@ const ArticlePage = async ({ params }: PageProps) => {
     if (!post || profile?.account_id !== account_id) {
         return (
             <div className='rounded-md border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800'>
-                記事が見つかりません
+                投稿が見つかりません
             </div>
         )
     }
@@ -76,11 +78,11 @@ const ArticlePage = async ({ params }: PageProps) => {
                 {canEdit && (
                     <div className='mt-4'>
                         <Link
-                            href={`/posts/edit?articleId=${post.article_id}`}
+                            href={`/posts/edit?postId=${post.post_id}`}
                             className='inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:text-gray-900'
                         >
                             <SquarePen className='h-4 w-4' />
-                            <span>この記事を編集</span>
+                            <span>この投稿を編集</span>
                         </Link>
                     </div>
                 )}
@@ -126,7 +128,7 @@ const ArticlePage = async ({ params }: PageProps) => {
                         className='inline-flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors font-medium'
                     >
                         <ArrowLeft className='h-4 w-4' />
-                        <span>ノート一覧に戻る</span>
+                        <span>投稿一覧に戻る</span>
                     </Link>
                 </div>
             </article>

@@ -40,7 +40,7 @@ export async function createPost(
     _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
-    const article_id_raw = String(formData.get('articleId') ?? '').trim()
+    const post_id_raw = String(formData.get('postId') ?? '').trim()
     const title = String(formData.get('title') ?? '').trim()
     const content = String(formData.get('content') ?? '').trim()
     const thumbnail_url_raw = String(formData.get('thumbnailUrl') ?? '').trim()
@@ -58,7 +58,7 @@ export async function createPost(
 
     const supabase = createAdminClient()
 
-    const article_id = isValidArticleId(article_id_raw) ? article_id_raw : generate_id(14)
+    const post_id = isValidArticleId(post_id_raw) ? post_id_raw : generate_id(14)
     const preview_token = generate_id(24)
     const read_time = set_read_time(content)
 
@@ -66,7 +66,7 @@ export async function createPost(
         .from('posts')
         .insert({
             author_id: auth.userId,
-            article_id,
+            post_id,
             preview_token,
             title,
             content,
@@ -82,7 +82,7 @@ export async function createPost(
         return { error: error?.message ?? '投稿に失敗しました' }
     }
 
-    await cleanup_thumbnail_on_create(article_id, cleanup_thumbnail_paths)
+    await cleanup_thumbnail_on_create(post_id, cleanup_thumbnail_paths)
 
     redirect(`/preview?article=${data.preview_token}`)
 }
@@ -91,15 +91,15 @@ export async function updatePost(
     _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
-    const article_id = String(formData.get('articleId') ?? '')
+    const post_id = String(formData.get('postId') ?? '')
     const title = String(formData.get('title') ?? '').trim()
     const content = String(formData.get('content') ?? '').trim()
     const thumbnail_url_raw = String(formData.get('thumbnailUrl') ?? '').trim()
     const next_thumbnail_url = thumbnail_url_raw || null
     const cleanup_thumbnail_paths = parse_cleanup_paths(formData.get('cleanupThumbnailPaths'))
 
-    if (!isValidArticleId(article_id)) {
-        return { error: '記事IDが不正です' }
+    if (!isValidArticleId(post_id)) {
+        return { error: '投稿IDが不正です' }
     }
 
     if (!title || !content) {
@@ -116,7 +116,7 @@ export async function updatePost(
     const { data: post } = await admin
         .from('posts')
         .select('author_id, thumbnail_url')
-        .eq('article_id', article_id)
+        .eq('post_id', post_id)
         .single()
 
     if (!post || post.author_id !== auth.userId) {
@@ -126,14 +126,14 @@ export async function updatePost(
     const { error } = await admin
         .from('posts')
         .update({ title, content, read_time, thumbnail_url: next_thumbnail_url })
-        .eq('article_id', article_id)
+        .eq('post_id', post_id)
 
     if (error) {
         return { error: error.message ?? '更新に失敗しました' }
     }
 
     await cleanup_thumbnail_on_update(
-        article_id,
+        post_id,
         cleanup_thumbnail_paths,
         post.thumbnail_url,
         next_thumbnail_url,
@@ -144,17 +144,17 @@ export async function updatePost(
         return account
     }
 
-    redirect(`/${account.accountId}/notes/${article_id}`)
+    redirect(`/${account.accountId}/posts/${post_id}`)
 }
 
 export async function deletePost(
     _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
-    const article_id = String(formData.get('articleId') ?? '')
+    const post_id = String(formData.get('postId') ?? '')
 
-    if (!isValidArticleId(article_id)) {
-        return { error: '記事IDが不正です' }
+    if (!isValidArticleId(post_id)) {
+        return { error: '投稿IDが不正です' }
     }
 
     const auth = await getAuthenticatedUserId()
@@ -166,20 +166,20 @@ export async function deletePost(
     const { data: post } = await admin
         .from('posts')
         .select('author_id, thumbnail_url')
-        .eq('article_id', article_id)
+        .eq('post_id', post_id)
         .single()
 
     if (!post || post.author_id !== auth.userId) {
         return { error: '削除権限がありません' }
     }
 
-    const { error } = await admin.from('posts').delete().eq('article_id', article_id)
+    const { error } = await admin.from('posts').delete().eq('post_id', post_id)
 
     if (error) {
-        return { error: error.message ?? '記事削除に失敗しました' }
+        return { error: error.message ?? '投稿削除に失敗しました' }
     }
 
-    await cleanup_thumbnail_on_delete(article_id, post.thumbnail_url)
+    await cleanup_thumbnail_on_delete(post_id, post.thumbnail_url)
 
     const account = await getCurrentUserAccountId()
     if (isActionError(account)) {

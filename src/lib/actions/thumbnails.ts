@@ -18,8 +18,8 @@ const remove_thumbnail_paths = async (paths: string[]) => {
     }
 }
 
-const is_scoped_thumbnail_path = (path: string, article_id: string) => {
-    return path.startsWith(`${article_id}/`) && !path.includes('..')
+const is_scoped_thumbnail_path = (path: string, post_id: string) => {
+    return path.startsWith(`${post_id}/`) && !path.includes('..')
 }
 
 export const extract_thumbnail_path = (thumbnail_url: string | null) => {
@@ -35,25 +35,22 @@ export const extract_thumbnail_path = (thumbnail_url: string | null) => {
     }
 }
 
-export const cleanup_thumbnail_on_create = async (
-    article_id: string,
-    candidate_paths: string[],
-) => {
+export const cleanup_thumbnail_on_create = async (post_id: string, candidate_paths: string[]) => {
     const targets = dedupe_paths(candidate_paths).filter(path =>
-        is_scoped_thumbnail_path(path, article_id),
+        is_scoped_thumbnail_path(path, post_id),
     )
 
     await remove_thumbnail_paths(targets)
 }
 
 export const cleanup_thumbnail_on_update = async (
-    article_id: string,
+    post_id: string,
     candidate_paths: string[],
     previous_thumbnail_url: string | null,
     next_thumbnail_url: string | null,
 ) => {
     const scoped_targets = dedupe_paths(candidate_paths).filter(path =>
-        is_scoped_thumbnail_path(path, article_id),
+        is_scoped_thumbnail_path(path, post_id),
     )
 
     const previous_path =
@@ -67,11 +64,11 @@ export const cleanup_thumbnail_on_update = async (
 }
 
 export const cleanup_thumbnail_on_delete = async (
-    article_id: string,
+    post_id: string,
     previous_thumbnail_url: string | null,
 ) => {
     const admin = createAdminClient()
-    const scoped_prefix = article_id
+    const scoped_prefix = post_id
 
     const { data, error } = await admin.storage
         .from(THUMBNAIL_BUCKET)

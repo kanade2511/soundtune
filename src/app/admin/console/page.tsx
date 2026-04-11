@@ -12,7 +12,7 @@ type UserRow = {
 }
 
 type PostRow = {
-    article_id: string
+    post_id: string
     preview_token: string | null
     title: string
     created_at: string
@@ -32,7 +32,7 @@ const ConsolePage = async () => {
     const { data: posts } = await admin
         .from('posts')
         .select(
-            'article_id, preview_token, title, created_at, approval_status, profiles!author_id (display_name, account_id)',
+            'post_id, preview_token, title, created_at, approval_status, profiles!author_id (display_name, account_id)',
         )
         .eq('approval_status', 'pending')
         .order('created_at', { ascending: false })
@@ -60,18 +60,18 @@ const ConsolePage = async () => {
             <section className='space-y-4'>
                 <div>
                     <h2 className='text-xl font-bold text-gray-800'>レビュー待ち</h2>
-                    <p className='mt-1 text-sm text-gray-600'>承認待ちの記事を確認できます。</p>
+                    <p className='mt-1 text-sm text-gray-600'>承認待ちの投稿を確認できます。</p>
                 </div>
 
                 {review_list.length === 0 ? (
                     <div className='rounded-md border border-gray-200 bg-white p-4 text-sm text-gray-600'>
-                        現在、承認待ちの記事はありません。
+                        現在、承認待ちの投稿はありません。
                     </div>
                 ) : (
                     <div className='space-y-4'>
                         {review_list.map(post => (
                             <div
-                                key={post.article_id}
+                                key={post.post_id}
                                 className='rounded-lg border border-gray-200 bg-white p-4 shadow-sm'
                             >
                                 <div className='flex flex-wrap items-center justify-between gap-3'>
@@ -91,7 +91,7 @@ const ConsolePage = async () => {
                                             {new Date(post.created_at).toLocaleDateString('ja-JP')}
                                         </p>
                                     </div>
-                                    <PostReviewActions articleId={post.article_id} />
+                                    <PostReviewActions postId={post.post_id} />
                                 </div>
                                 {post.preview_token ? (
                                     <div className='mt-3 text-xs text-gray-500'>

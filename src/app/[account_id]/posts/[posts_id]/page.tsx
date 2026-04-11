@@ -1,42 +1,57 @@
-import { ArrowLeft, Calendar, Clock } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, SquarePen } from 'lucide-react'
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
-import PostReviewActions from '@/app/admin/console/post-review-actions'
 import Breadcrumb from '@/components/Breadcrumb'
 import { format_read_time } from '@/lib/read-time'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
-import '../[account_id]/posts/[posts_id]/article.css'
+import './article.css'
 
-type PreviewPageProps = {
-    searchParams: Promise<{ article?: string }>
+interface PageProps {
+    params: Promise<{ account_id: string; posts_id: string }>
 }
 
-const PreviewPage = async ({ searchParams }: PreviewPageProps) => {
-    const params = await searchParams
-    const preview_token = params.article
+export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
+    const { account_id, posts_id } = await params
+    const post_id = posts_id
+    const supabase = createAdminClient()
 
-    if (!preview_token) {
-        return (
-            <div className='rounded-md border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800'>
-                プレビュートークンが指定されていません
-            </div>
-        )
+    const { data: post } = await supabase
+        .from('posts')
+        .select('title, content, created_at, profiles!author_id (account_id)')
+        .eq('post_id', post_id)
+        .single()
+
+    const profile = Array.isArray(post?.profiles) ? post?.profiles[0] : post?.profiles
+
+    if (!post || profile?.account_id !== account_id) {
+        return { title: '投稿が見つかりません - SoundTune' }
     }
 
+    return {
+        title: `${post.title} - SoundTune`,
+    }
+}
+
+const ArticlePage = async ({ params }: PageProps) => {
+    const { account_id, posts_id } = await params
+    const post_id = posts_id
     const supabase = createAdminClient()
+
     const { data: post } = await supabase
         .from('posts')
         .select(
-            'post_id, title, content, created_at, read_time, thumbnail_url, approval_status, published, profiles!author_id (display_name, account_id, avatar_url)',
+            'post_id, title, content, created_at, read_time, thumbnail_url, approval_status, author_id, profiles!author_id (display_name, account_id)',
         )
-        .eq('preview_token', preview_token)
+        .eq('post_id', post_id)
         .single()
 
-    if (!post) {
+    const profile = Array.isArray(post?.profiles) ? post?.profiles[0] : post?.profiles
+
+    if (!post || profile?.account_id !== account_id) {
         return (
             <div className='rounded-md border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800'>
                 投稿が見つかりません
@@ -44,43 +59,31 @@ const PreviewPage = async ({ searchParams }: PreviewPageProps) => {
         )
     }
 
-    const profile = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles
-
-    let isAdmin = false
-    const client = await createClient()
+    const authClient = await createClient()
     const {
         data: { user },
-    } = await client.auth.getUser()
-
-    if (user) {
-        const { data: currentProfile } = await client
-            .from('profiles')
-            .select('role')
-            .eq('id', user.id)
-            .single()
-        isAdmin = currentProfile?.role === 'admin'
-    }
-
-    if (post.approval_status === 'approved' && post.published && profile?.account_id) {
-        redirect(`/${profile.account_id}/posts/${post.post_id}`)
-    }
+    } = await authClient.auth.getUser()
+    const canEdit = user?.id === post.author_id
 
     return (
         <div className='min-h-screen'>
             <article className='max-w-4xl py-2 sm:py-4'>
                 <Breadcrumb
                     items={[
-                        {
-                            label: profile?.display_name ?? 'user',
-                            href: profile?.account_id ? `/${profile.account_id}` : undefined,
-                        },
+                        { label: profile?.display_name ?? 'user', href: `/${account_id}` },
                         { label: post.title },
                     ]}
                 />
 
-                {isAdmin && (
-                    <div className='mb-4'>
-                        <PostReviewActions postId={post.post_id} />
+                {canEdit && (
+                    <div className='mt-4'>
+                        <Link
+                            href={`/posts/edit?postId=${post.post_id}`}
+                            className='inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:text-gray-900'
+                        >
+                            <SquarePen className='h-4 w-4' />
+                            <span>この投稿を編集</span>
+                        </Link>
                     </div>
                 )}
 
@@ -133,4 +136,4 @@ const PreviewPage = async ({ searchParams }: PreviewPageProps) => {
     )
 }
 
-export default PreviewPage
+export default ArticlePage

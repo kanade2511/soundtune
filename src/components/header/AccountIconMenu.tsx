@@ -124,7 +124,7 @@ const AccountIconMenu = ({
                     onClick={() => set_is_account_menu_open(false)}
                 >
                     <NotebookPen className='h-4 w-4 shrink-0' aria-hidden='true' />
-                    <span>ノートを投稿する</span>
+                    <span>投稿する</span>
                 </Link>
                 <Link
                     href='/profile'

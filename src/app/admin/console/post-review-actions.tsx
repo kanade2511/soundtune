@@ -23,6 +23,7 @@ const approvePost = async (formData: FormData) => {
         .eq('article_id', articleId)
 
     revalidatePath('/admin/console')
+    revalidatePath('/preview')
 }
 
 const rejectPost = async (formData: FormData) => {
@@ -42,6 +43,7 @@ const rejectPost = async (formData: FormData) => {
         .eq('article_id', articleId)
 
     revalidatePath('/admin/console')
+    revalidatePath('/preview')
 }
 
 const PostReviewActions = ({ articleId }: ReviewActionsProps) => {

@@ -1,9 +1,10 @@
 'use client'
 
-import { useActionState, useMemo, useState } from 'react'
+import Image from 'next/image'
+import { useActionState, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { updateProfile } from '@/lib/actions/profile'
-import { createSupabaseBrowserClient } from '@/lib/supabaseClient'
+import { compress_image_file } from '@/lib/image-compression'
 
 type ActionState = {
     error?: string
@@ -17,16 +18,39 @@ type ProfileFormProps = {
 }
 
 const initial_state: ActionState = {}
+const STORAGE_UPLOAD_TIMEOUT_MS = 120000
 
-const SubmitButton = () => {
+const with_timeout = async <T,>(
+    promise: Promise<T>,
+    timeout_ms: number,
+    timeout_message: string,
+) => {
+    return await new Promise<T>((resolve, reject) => {
+        const timer = setTimeout(() => {
+            reject(new Error(timeout_message))
+        }, timeout_ms)
+
+        promise
+            .then(value => {
+                clearTimeout(timer)
+                resolve(value)
+            })
+            .catch(error => {
+                clearTimeout(timer)
+                reject(error)
+            })
+    })
+}
+
+const SubmitButton = ({ uploading }: { uploading: boolean }) => {
     const { pending } = useFormStatus()
     return (
         <button
             type='submit'
             className='rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60'
-            disabled={pending}
+            disabled={pending || uploading}
         >
-            {pending ? '更新中...' : '更新する'}
+            {uploading ? 'アップロード中...' : pending ? '更新中...' : '更新する'}
         </button>
     )
 }
@@ -36,7 +60,6 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
     const [currentAvatarUrl, setCurrentAvatarUrl] = useState(avatarUrl ?? '')
     const [uploading, setUploading] = useState(false)
     const [uploadError, setUploadError] = useState<string | null>(null)
-    const supabase = useMemo(() => createSupabaseBrowserClient(), [])
 
     const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -47,51 +70,54 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
         setUploading(true)
         setUploadError(null)
 
-        const { data, error: userError } = await supabase.auth.getUser()
-        if (userError || !data.user) {
-            setUploadError('ログインが必要です')
-            setUploading(false)
-            return
-        }
+        try {
+            const compressed_file = await compress_image_file(file)
 
-        // 旧アバター画像がavatarsバケットのものであれば削除
-        if (currentAvatarUrl && currentAvatarUrl.includes('/storage/v1/object/public/avatars/')) {
-            try {
-                // パス部分だけ抽出
-                const url = new URL(currentAvatarUrl)
-                const pathParts = url.pathname.split('/avatars/')
-                if (pathParts.length === 2) {
-                    const oldFilePath = decodeURIComponent(pathParts[1])
-                    await supabase.storage.from('avatars').remove([oldFilePath])
-                }
-            } catch (e) {
-                // 削除失敗は致命的でないので無視
+            const upload_form_data = new FormData()
+            upload_form_data.append('file', compressed_file)
+            upload_form_data.append('oldAvatarUrl', currentAvatarUrl)
+
+            const response = await with_timeout(
+                fetch('/api/storage/upload-avatar', {
+                    method: 'POST',
+                    body: upload_form_data,
+                }),
+                STORAGE_UPLOAD_TIMEOUT_MS,
+                '画像アップロードがタイムアウトしました',
+            )
+
+            const payload = await response.json().catch(() => null)
+            if (!response.ok) {
+                throw new Error(payload?.error ?? '画像アップロードに失敗しました')
             }
-        }
 
-        const extension = file.name.split('.').pop()?.toLowerCase() ?? 'png'
-        const fileId =
-            globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`.replace('.', '')
-        const filePath = `${data.user.id}/${fileId}.${extension}`
+            const public_url = String(payload?.publicUrl ?? '')
+            if (!public_url) {
+                throw new Error('画像URLの取得に失敗しました')
+            }
 
-        const { error } = await supabase.storage
-            .from('avatars')
-            .upload(filePath, file, { upsert: true, contentType: file.type })
-
-        if (error) {
-            setUploadError(error.message)
+            setCurrentAvatarUrl(public_url)
+        } catch (error) {
+            const message =
+                error instanceof Error ? error.message : '画像アップロードに失敗しました'
+            setUploadError(
+                message.includes('Failed to fetch')
+                    ? '通信エラーで画像アップロードに失敗しました。接続状態を確認して再試行してください。'
+                    : message,
+            )
+        } finally {
             setUploading(false)
-            return
         }
-
-        const { data: publicData } = supabase.storage.from('avatars').getPublicUrl(filePath)
-        setCurrentAvatarUrl(publicData.publicUrl)
-        setUploading(false)
     }
 
     return (
         <form
             action={formAction}
+            onSubmit={event => {
+                if (uploading) {
+                    event.preventDefault()
+                }
+            }}
             className='space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm'
         >
             <div className='space-y-2'>
@@ -114,9 +140,11 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
                 </label>
                 <div className='flex items-center gap-4'>
                     {currentAvatarUrl ? (
-                        <img
+                        <Image
                             src={currentAvatarUrl}
                             alt='avatar'
+                            width={56}
+                            height={56}
                             className='h-14 w-14 rounded-full object-cover'
                         />
                     ) : (
@@ -126,17 +154,16 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
                     )}
                     <input
                         id='avatar'
-                        name='avatar'
                         type='file'
                         accept='image/*'
                         onChange={handleAvatarChange}
+                        disabled={uploading}
                         className='w-full rounded-md border border-gray-200 px-3 py-2 text-sm shadow-sm'
                     />
                 </div>
                 <input type='hidden' name='avatar_url' value={currentAvatarUrl} />
                 {uploading ? <p className='text-xs text-gray-500'>アップロード中...</p> : null}
                 {uploadError ? <p className='text-xs text-red-600'>{uploadError}</p> : null}
-                <p className='text-xs text-gray-500'>保存先: Supabase Storage (avatars)</p>
             </div>
 
             <div className='space-y-2'>
@@ -157,7 +184,7 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
             {state?.error ? <p className='text-sm text-red-600'>{state.error}</p> : null}
             {state?.success ? <p className='text-sm text-green-600'>更新しました</p> : null}
 
-            <SubmitButton />
+            <SubmitButton uploading={uploading} />
         </form>
     )
 }

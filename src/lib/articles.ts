@@ -53,8 +53,3 @@ export const getPublishedPosts = async (): Promise<PublishedPost[]> => {
         }
     })
 }
-
-export const getLatestPublishedPosts = async (limit = 5): Promise<PublishedPost[]> => {
-    const posts = await getPublishedPosts()
-    return posts.slice(0, limit)
-}

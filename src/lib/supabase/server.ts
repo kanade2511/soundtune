@@ -33,9 +33,14 @@ export const createClient = async () => {
                 return build_cookie_list(cookieHeader)
             },
             setAll(cookiesToSet) {
-                cookiesToSet.forEach(({ name, value, options }) => {
-                    cookieStore.set(name, value, options)
-                })
+                try {
+                    cookiesToSet.forEach(({ name, value, options }) => {
+                        cookieStore.set(name, value, options)
+                    })
+                } catch {
+                    // Server Components cannot mutate cookies. Ignore and rely on
+                    // middleware/route handlers/server actions where mutation is allowed.
+                }
             },
         },
     })

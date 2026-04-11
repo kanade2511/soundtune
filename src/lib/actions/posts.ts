@@ -7,6 +7,11 @@ import {
     getCurrentUserAccountId,
     isActionError,
 } from '@/lib/actions/action-context'
+import {
+    cleanup_thumbnail_on_create,
+    cleanup_thumbnail_on_delete,
+    cleanup_thumbnail_on_update,
+} from '@/lib/actions/thumbnails'
 import { isValidArticleId } from '@/lib/article-id'
 import { set_read_time } from '@/lib/read-time'
 import { createAdminClient } from '@/lib/supabase/server'
@@ -19,14 +24,28 @@ const generate_id = (length: number) => {
     return crypto.randomBytes(length).toString('base64url').slice(0, length)
 }
 
+const parse_cleanup_paths = (raw_value: FormDataEntryValue | null) => {
+    if (typeof raw_value !== 'string' || !raw_value) return []
+
+    try {
+        const parsed: unknown = JSON.parse(raw_value)
+        if (!Array.isArray(parsed)) return []
+        return parsed.filter((value): value is string => typeof value === 'string')
+    } catch {
+        return []
+    }
+}
+
 export async function createPost(
     _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
+    const article_id_raw = String(formData.get('articleId') ?? '').trim()
     const title = String(formData.get('title') ?? '').trim()
     const content = String(formData.get('content') ?? '').trim()
     const thumbnail_url_raw = String(formData.get('thumbnailUrl') ?? '').trim()
     const thumbnail_url = thumbnail_url_raw || null
+    const cleanup_thumbnail_paths = parse_cleanup_paths(formData.get('cleanupThumbnailPaths'))
 
     if (!title || !content) {
         return { error: 'タイトルと本文は必須です' }
@@ -39,7 +58,7 @@ export async function createPost(
 
     const supabase = createAdminClient()
 
-    const article_id = generate_id(14)
+    const article_id = isValidArticleId(article_id_raw) ? article_id_raw : generate_id(14)
     const preview_token = generate_id(24)
     const read_time = set_read_time(content)
 
@@ -63,6 +82,8 @@ export async function createPost(
         return { error: error?.message ?? '投稿に失敗しました' }
     }
 
+    await cleanup_thumbnail_on_create(article_id, cleanup_thumbnail_paths)
+
     redirect(`/preview?article=${data.preview_token}`)
 }
 
@@ -73,6 +94,9 @@ export async function updatePost(
     const article_id = String(formData.get('articleId') ?? '')
     const title = String(formData.get('title') ?? '').trim()
     const content = String(formData.get('content') ?? '').trim()
+    const thumbnail_url_raw = String(formData.get('thumbnailUrl') ?? '').trim()
+    const next_thumbnail_url = thumbnail_url_raw || null
+    const cleanup_thumbnail_paths = parse_cleanup_paths(formData.get('cleanupThumbnailPaths'))
 
     if (!isValidArticleId(article_id)) {
         return { error: '記事IDが不正です' }
@@ -91,7 +115,7 @@ export async function updatePost(
     const read_time = set_read_time(content)
     const { data: post } = await admin
         .from('posts')
-        .select('author_id')
+        .select('author_id, thumbnail_url')
         .eq('article_id', article_id)
         .single()
 
@@ -101,12 +125,19 @@ export async function updatePost(
 
     const { error } = await admin
         .from('posts')
-        .update({ title, content, read_time })
+        .update({ title, content, read_time, thumbnail_url: next_thumbnail_url })
         .eq('article_id', article_id)
 
     if (error) {
         return { error: error.message ?? '更新に失敗しました' }
     }
+
+    await cleanup_thumbnail_on_update(
+        article_id,
+        cleanup_thumbnail_paths,
+        post.thumbnail_url,
+        next_thumbnail_url,
+    )
 
     const account = await getCurrentUserAccountId()
     if (isActionError(account)) {
@@ -134,7 +165,7 @@ export async function deletePost(
     const admin = createAdminClient()
     const { data: post } = await admin
         .from('posts')
-        .select('author_id')
+        .select('author_id, thumbnail_url')
         .eq('article_id', article_id)
         .single()
 
@@ -147,6 +178,8 @@ export async function deletePost(
     if (error) {
         return { error: error.message ?? '記事削除に失敗しました' }
     }
+
+    await cleanup_thumbnail_on_delete(article_id, post.thumbnail_url)
 
     const account = await getCurrentUserAccountId()
     if (isActionError(account)) {

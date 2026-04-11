@@ -1,6 +1,11 @@
+import crypto from 'node:crypto'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import NewPostForm from './new-post-form'
+
+const generate_article_id = () => {
+    return crypto.randomBytes(14).toString('base64url').slice(0, 14)
+}
 
 const NewPostPage = async () => {
     const supabase = await createClient().catch(() => null)
@@ -17,13 +22,15 @@ const NewPostPage = async () => {
         redirect('/auth/login?next=/posts/new')
     }
 
+    const article_id = generate_article_id()
+
     return (
         <div className='space-y-6'>
             <div>
                 <h1 className='text-2xl font-bold text-gray-800'>新規投稿</h1>
                 <p className='mt-2 text-sm text-gray-600'>タイトルと本文を入力してください。</p>
             </div>
-            <NewPostForm />
+            <NewPostForm articleId={article_id} />
         </div>
     )
 }

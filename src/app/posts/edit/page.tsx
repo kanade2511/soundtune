@@ -28,7 +28,7 @@ const EditPostPage = async ({ searchParams }: PageProps) => {
     const admin = createAdminClient()
     const { data: post } = await admin
         .from('posts')
-        .select('title, content, author_id')
+        .select('title, content, author_id, thumbnail_url')
         .eq('article_id', article_id)
         .single()
 
@@ -58,6 +58,7 @@ const EditPostPage = async ({ searchParams }: PageProps) => {
                 articleId={article_id}
                 initialTitle={post.title}
                 initialContent={post.content}
+                initialThumbnailUrl={post.thumbnail_url}
             />
         </div>
     )

@@ -3,18 +3,30 @@
 import { NotebookPen, User } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import AccountIconMenu from '@/components/header/AccountIconMenu'
 import useHeaderAuthState from '@/components/header/useHeaderAuthState'
+import { generatePostId } from '@/lib/post-id'
 
 const Header = () => {
     const [is_client_ready, set_is_client_ready] = useState(false)
+    const router = useRouter()
     const { is_loading_auth, is_logged_in, avatar_url, display_name, account_id, is_admin } =
         useHeaderAuthState()
 
     useEffect(() => {
         set_is_client_ready(true)
     }, [])
+
+    const handle_create_post_click = () => {
+        if (!account_id) {
+            router.push('/auth/login')
+            return
+        }
+
+        router.push(`/${account_id}/${generatePostId(14)}/edit`)
+    }
 
     return (
         <header className='sticky top-0 z-50 h-[72px] border-b border-blue-200 bg-white/80 backdrop-blur-sm'>
@@ -49,13 +61,14 @@ const Header = () => {
                             />
                         )}
 
-                        <Link
-                            href='/posts/new'
+                        <button
+                            type='button'
+                            onClick={handle_create_post_click}
                             className='inline-flex items-center gap-1.5 rounded-md border border-black/20 bg-white/70 px-3 py-1.5 text-xs font-semibold text-gray-700 transition hover:bg-white sm:px-3.5 sm:py-2 sm:text-sm'
                         >
                             <NotebookPen className='h-3.5 w-3.5 sm:h-4 sm:w-4' />
                             <span>投稿する</span>
-                        </Link>
+                        </button>
                     </div>
                 </div>
             </div>

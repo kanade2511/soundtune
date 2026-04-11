@@ -40,7 +40,7 @@
 	- 記事が `pending` / `rejected` に戻っても、いいねは保持。
 
 ## Stage 0 用件定義
-- サービスの目標と設計を確定する: `soundtune-plans.md`, `soundtune-specs.md`
+- サービスの目標と設計を確定する: `soundtune-plans.md`
 
 ## Stage 1 環境構築
 - プロジェクト作成

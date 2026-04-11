@@ -9,7 +9,7 @@ import PostReviewActions from '@/app/admin/console/post-review-actions'
 import Breadcrumb from '@/components/Breadcrumb'
 import { format_read_time } from '@/lib/read-time'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
-import '../[account_id]/posts/[posts_id]/article.css'
+import '@/styles/article.css'
 
 type PreviewPageProps = {
     searchParams: Promise<{ article?: string }>
@@ -62,7 +62,7 @@ const PreviewPage = async ({ searchParams }: PreviewPageProps) => {
     }
 
     if (post.approval_status === 'approved' && post.published && profile?.account_id) {
-        redirect(`/${profile.account_id}/posts/${post.post_id}`)
+        redirect(`/${profile.account_id}/${post.post_id}`)
     }
 
     return (

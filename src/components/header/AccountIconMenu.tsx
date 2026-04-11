@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { generatePostId } from '@/lib/post-id'
 import { createSupabaseBrowserClient } from '@/lib/supabaseClient'
 
 type AccountIconMenuProps = {
@@ -25,6 +26,17 @@ const AccountIconMenu = ({
     const account_menu_ref = useRef<HTMLDivElement | null>(null)
     const router = useRouter()
     const supabase = useMemo(() => createSupabaseBrowserClient(), [])
+
+    const handle_create_post_click = () => {
+        set_is_account_menu_open(false)
+
+        if (!account_id) {
+            router.push('/auth/login')
+            return
+        }
+
+        router.push(`/${account_id}/${generatePostId(14)}/edit`)
+    }
 
     useEffect(() => {
         if (!is_account_menu_open) return
@@ -117,15 +129,15 @@ const AccountIconMenu = ({
                     </div>
                 )}
                 <div className='my-1 border-t border-black/10' />
-                <Link
-                    href='/posts/new'
+                <button
+                    type='button'
                     role='menuitem'
-                    className='flex items-center gap-2 rounded-md px-4 py-2.5 text-sm text-gray-700 transition hover:bg-black/[0.04]'
-                    onClick={() => set_is_account_menu_open(false)}
+                    className='flex w-full items-center gap-2 rounded-md px-4 py-2.5 text-left text-sm text-gray-700 transition hover:bg-black/[0.04]'
+                    onClick={handle_create_post_click}
                 >
                     <NotebookPen className='h-4 w-4 shrink-0' aria-hidden='true' />
                     <span>投稿する</span>
-                </Link>
+                </button>
                 <Link
                     href='/profile'
                     role='menuitem'

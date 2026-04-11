@@ -53,7 +53,7 @@ const AccountNotesPage = async ({ params }: PageProps) => {
                         {list.map(note => (
                             <Link
                                 key={note.post_id}
-                                href={`/${profile.account_id}/posts/${note.post_id}`}
+                                href={`/${profile.account_id}/${note.post_id}`}
                                 className='block rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition hover:border-blue-200 hover:shadow-md'
                             >
                                 <div className='space-y-2'>

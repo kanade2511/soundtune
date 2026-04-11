@@ -4,21 +4,21 @@ import { useRouter } from 'next/navigation'
 import { useActionState, useCallback, useEffect, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import Cropper, { type Area, type MediaSize } from 'react-easy-crop'
-import { deletePost, updatePost } from '@/lib/actions/posts'
+import { createPost, deletePost, updatePost } from '@/lib/actions/posts'
 import { compress_image_file, POST_IMAGE_COMPRESSION_RULE } from '@/lib/image-compression'
 
-type ActionState = {
-    error?: string
-}
+type FormMode = 'new' | 'edit'
 
-type EditPostFormProps = {
-    postId: string
-    initialTitle: string
-    initialContent: string
-    initialThumbnailUrl: string | null
-}
+type PostFormProps =
+    | { mode: 'new'; postId: string }
+    | {
+          mode: 'edit'
+          postId: string
+          initialTitle: string
+          initialContent: string
+          initialThumbnailUrl: string | null
+      }
 
-const initial_state: ActionState = {}
 const STORAGE_UPLOAD_TIMEOUT_MS = 120000
 const THUMBNAIL_CROP_ASPECT = 16 / 9
 const THUMBNAIL_CROP_FRAME_SHORT_SIDE = 320
@@ -41,7 +41,6 @@ const to_blob = (canvas: HTMLCanvasElement, type: string, quality?: number): Pro
                     reject(new Error('画像の切り抜きに失敗しました'))
                     return
                 }
-
                 resolve(blob)
             },
             type,
@@ -55,12 +54,8 @@ const get_cropped_thumbnail_file = async (img_src: string, cropped_area_pixels: 
     const canvas = document.createElement('canvas')
     canvas.width = Math.max(1, Math.round(cropped_area_pixels.width))
     canvas.height = Math.max(1, Math.round(cropped_area_pixels.height))
-
     const context = canvas.getContext('2d')
-    if (!context) {
-        throw new Error('画像の切り抜きに失敗しました')
-    }
-
+    if (!context) throw new Error('画像の切り抜きに失敗しました')
     context.drawImage(
         image,
         Math.round(cropped_area_pixels.x),
@@ -72,14 +67,11 @@ const get_cropped_thumbnail_file = async (img_src: string, cropped_area_pixels: 
         canvas.width,
         canvas.height,
     )
-
     const blob = await to_blob(canvas, 'image/webp', 0.92)
     return new File([blob], 'thumbnail-cropped.webp', { type: 'image/webp' })
 }
 
-const dedupe_paths = (paths: string[]) => {
-    return Array.from(new Set(paths.filter(Boolean)))
-}
+const dedupe_paths = (paths: string[]) => Array.from(new Set(paths.filter(Boolean)))
 
 const with_timeout = async <T,>(
     promise: Promise<T>,
@@ -87,10 +79,7 @@ const with_timeout = async <T,>(
     timeout_message: string,
 ) => {
     return await new Promise<T>((resolve, reject) => {
-        const timer = setTimeout(() => {
-            reject(new Error(timeout_message))
-        }, timeout_ms)
-
+        const timer = setTimeout(() => reject(new Error(timeout_message)), timeout_ms)
         promise
             .then(value => {
                 clearTimeout(timer)
@@ -105,7 +94,6 @@ const with_timeout = async <T,>(
 
 const extract_thumbnail_path = (thumbnail_url: string | null) => {
     if (!thumbnail_url) return ''
-
     try {
         const url = new URL(thumbnail_url)
         const [, path = ''] = url.pathname.split('/storage/v1/object/public/Articles/')
@@ -116,7 +104,7 @@ const extract_thumbnail_path = (thumbnail_url: string | null) => {
     }
 }
 
-const SubmitButton = ({ uploading }: { uploading: boolean }) => {
+const SubmitButton = ({ uploading, mode }: { uploading: boolean; mode: FormMode }) => {
     const { pending } = useFormStatus()
     return (
         <button
@@ -124,7 +112,15 @@ const SubmitButton = ({ uploading }: { uploading: boolean }) => {
             className='rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60'
             disabled={pending || uploading}
         >
-            {uploading ? 'アップロード中...' : pending ? '更新中...' : '更新する'}
+            {uploading
+                ? 'アップロード中...'
+                : pending
+                  ? mode === 'edit'
+                      ? '更新中...'
+                      : '投稿中...'
+                  : mode === 'edit'
+                    ? '更新する'
+                    : '投稿する'}
         </button>
     )
 }
@@ -142,21 +138,20 @@ const DeleteButton = () => {
     )
 }
 
-const EditPostForm = ({
-    postId,
-    initialTitle,
-    initialContent,
-    initialThumbnailUrl,
-}: EditPostFormProps) => {
-    const [state, formAction] = useActionState(updatePost, initial_state)
-    const [deleteState, deleteAction] = useActionState(deletePost, initial_state)
+const PostForm = (props: PostFormProps) => {
+    const mode = props.mode
+    const postId = props.postId
+    const [state, formAction] = useActionState(mode === 'edit' ? updatePost : createPost, {})
+    const [deleteState, deleteAction] = useActionState(deletePost, {})
     const router = useRouter()
     const [uploading, setUploading] = useState(false)
     const [uploadError, setUploadError] = useState<string | null>(null)
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [currentThumbnailUrl, setCurrentThumbnailUrl] = useState(initialThumbnailUrl ?? '')
+    const [currentThumbnailUrl, setCurrentThumbnailUrl] = useState(
+        mode === 'edit' ? (props.initialThumbnailUrl ?? '') : '',
+    )
     const [currentThumbnailPath, setCurrentThumbnailPath] = useState(
-        extract_thumbnail_path(initialThumbnailUrl),
+        mode === 'edit' ? extract_thumbnail_path(props.initialThumbnailUrl) : '',
     )
     const [sessionUploadedPaths, setSessionUploadedPaths] = useState<string[]>([])
     const [cleanupThumbnailPaths, setCleanupThumbnailPaths] = useState<string[]>([])
@@ -169,9 +164,7 @@ const EditPostForm = ({
     const [cropped_area_pixels, setCroppedAreaPixels] = useState<Area>()
 
     useEffect(() => {
-        if (state?.error) {
-            setIsSubmitting(false)
-        }
+        if (state?.error) setIsSubmitting(false)
     }, [state?.error])
 
     const reset_crop_state = useCallback(() => {
@@ -196,7 +189,6 @@ const EditPostForm = ({
             setMaxZoom(DEFAULT_MAX_THUMBNAIL_ZOOM)
             return
         }
-
         const short_side = Math.min(width, height)
         const next_max_zoom = Math.max(
             1,
@@ -216,15 +208,12 @@ const EditPostForm = ({
         (paths: string[]) => {
             const targets = dedupe_paths(paths)
             if (targets.length === 0) return
-
             const payload = JSON.stringify({ postId, paths: targets })
-
             if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
                 const blob = new Blob([payload], { type: 'application/json' })
                 navigator.sendBeacon('/api/thumbnails/cleanup', blob)
                 return
             }
-
             void fetch('/api/thumbnails/cleanup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -240,17 +229,13 @@ const EditPostForm = ({
             if (isSubmitting) return
             request_cleanup(sessionUploadedPaths)
         }
-
         window.addEventListener('beforeunload', handle_beforeunload)
         return () => window.removeEventListener('beforeunload', handle_beforeunload)
     }, [isSubmitting, request_cleanup, sessionUploadedPaths])
 
     const handleThumbnailChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
-        if (!file) {
-            return
-        }
-
+        if (!file) return
         const reader = new FileReader()
         reader.addEventListener('load', () => {
             const result = reader.result?.toString() ?? ''
@@ -258,64 +243,43 @@ const EditPostForm = ({
                 setUploadError('画像の読み込みに失敗しました')
                 return
             }
-
             setUploadError(null)
             setCropSrc(result)
             setIsCropperOpen(true)
             reset_crop_state()
         })
         reader.readAsDataURL(file)
-
         event.target.value = ''
     }
 
     const upload_cropped_thumbnail = async () => {
-        if (!crop_src || !cropped_area_pixels) {
-            return
-        }
-
+        if (!crop_src || !cropped_area_pixels) return
         setUploading(true)
         setUploadError(null)
-
         try {
             const cropped_file = await get_cropped_thumbnail_file(crop_src, cropped_area_pixels)
             const compressed_file = await compress_image_file(
                 cropped_file,
                 POST_IMAGE_COMPRESSION_RULE,
             )
-
             const upload_form_data = new FormData()
             upload_form_data.append('postId', postId)
             upload_form_data.append('currentPath', currentThumbnailPath)
             upload_form_data.append('file', compressed_file)
-
             const response = await with_timeout(
-                fetch('/api/storage/upload-thumbnail', {
-                    method: 'POST',
-                    body: upload_form_data,
-                }),
+                fetch('/api/storage/upload-thumbnail', { method: 'POST', body: upload_form_data }),
                 STORAGE_UPLOAD_TIMEOUT_MS,
                 '画像アップロードがタイムアウトしました',
             )
-
             const payload = await response.json().catch(() => null)
-            if (!response.ok) {
-                throw new Error(payload?.error ?? '画像アップロードに失敗しました')
-            }
-
+            if (!response.ok) throw new Error(payload?.error ?? '画像アップロードに失敗しました')
             const public_url = String(payload?.publicUrl ?? '')
             const uploaded_path = String(payload?.path ?? '')
-            if (!public_url) {
-                throw new Error('画像URLの取得に失敗しました')
-            }
-            if (!uploaded_path) {
-                throw new Error('画像パスの取得に失敗しました')
-            }
-
+            if (!public_url) throw new Error('画像URLの取得に失敗しました')
+            if (!uploaded_path) throw new Error('画像パスの取得に失敗しました')
             if (currentThumbnailPath && currentThumbnailPath !== uploaded_path) {
                 setCleanupThumbnailPaths(prev => dedupe_paths([...prev, currentThumbnailPath]))
             }
-
             setCurrentThumbnailUrl(public_url)
             setCurrentThumbnailPath(uploaded_path)
             setSessionUploadedPaths(prev => dedupe_paths([...prev, uploaded_path]))
@@ -333,6 +297,7 @@ const EditPostForm = ({
         }
     }
 
+    // --- フォーム本体 ---
     return (
         <div className='space-y-6'>
             <form
@@ -361,13 +326,12 @@ const EditPostForm = ({
                         id='title'
                         name='title'
                         type='text'
-                        defaultValue={initialTitle}
+                        defaultValue={mode === 'edit' ? props.initialTitle : ''}
                         placeholder='投稿のタイトルを入力'
                         className='w-full rounded-md border border-gray-200 px-3 py-2 text-sm shadow-sm'
                         required
                     />
                 </div>
-
                 <div className='space-y-2'>
                     <label htmlFor='content' className='text-sm font-semibold text-gray-700'>
                         本文
@@ -376,13 +340,12 @@ const EditPostForm = ({
                         id='content'
                         name='content'
                         rows={16}
-                        defaultValue={initialContent}
+                        defaultValue={mode === 'edit' ? props.initialContent : ''}
                         placeholder='投稿の内容を入力'
                         className='w-full rounded-md border border-gray-200 px-3 py-2 text-sm shadow-sm'
                         required
                     />
                 </div>
-
                 <div className='space-y-2'>
                     <label htmlFor='thumbnail' className='text-sm font-semibold text-gray-700'>
                         サムネイル画像
@@ -401,7 +364,6 @@ const EditPostForm = ({
                         <p className='text-xs text-gray-500'>画像をアップロードしました</p>
                     ) : null}
                 </div>
-
                 {is_cropper_open && (
                     <div className='fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4'>
                         <div className='w-full max-w-2xl rounded-xl bg-white p-4 shadow-xl'>
@@ -409,7 +371,6 @@ const EditPostForm = ({
                             <p className='mt-1 text-xs text-gray-500'>
                                 ドラッグで位置、スライダーで拡大（16:9）
                             </p>
-
                             <div className='relative mt-3 h-[320px] w-full overflow-hidden rounded-lg bg-gray-900'>
                                 <Cropper
                                     image={crop_src}
@@ -425,16 +386,15 @@ const EditPostForm = ({
                                     showGrid={true}
                                 />
                             </div>
-
                             <div className='mt-4'>
                                 <label
-                                    htmlFor='thumbnail-zoom-edit'
+                                    htmlFor='thumbnail-zoom'
                                     className='text-xs font-medium text-gray-600'
                                 >
                                     ズーム
                                 </label>
                                 <input
-                                    id='thumbnail-zoom-edit'
+                                    id='thumbnail-zoom'
                                     type='range'
                                     min={min_zoom}
                                     max={max_zoom}
@@ -444,7 +404,6 @@ const EditPostForm = ({
                                     className='mt-1 w-full'
                                 />
                             </div>
-
                             <div className='mt-4 flex justify-end gap-2'>
                                 <button
                                     type='button'
@@ -466,11 +425,9 @@ const EditPostForm = ({
                         </div>
                     </div>
                 )}
-
                 {state?.error ? <p className='text-sm text-red-600'>{state.error}</p> : null}
-
                 <div className='flex flex-wrap items-center gap-3'>
-                    <SubmitButton uploading={uploading} />
+                    <SubmitButton uploading={uploading} mode={mode} />
                     <button
                         type='button'
                         onClick={() => {
@@ -483,16 +440,17 @@ const EditPostForm = ({
                     </button>
                 </div>
             </form>
-
-            <form action={deleteAction}>
-                <input type='hidden' name='postId' value={postId} />
-                {deleteState?.error ? (
-                    <p className='mb-2 text-sm text-red-600'>{deleteState.error}</p>
-                ) : null}
-                <DeleteButton />
-            </form>
+            {mode === 'edit' && (
+                <form action={deleteAction}>
+                    <input type='hidden' name='postId' value={postId} />
+                    {deleteState?.error ? (
+                        <p className='mb-2 text-sm text-red-600'>{deleteState.error}</p>
+                    ) : null}
+                    <DeleteButton />
+                </form>
+            )}
         </div>
     )
 }
 
-export default EditPostForm
+export default PostForm

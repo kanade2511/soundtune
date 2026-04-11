@@ -8,15 +8,15 @@ import remarkGfm from 'remark-gfm'
 import Breadcrumb from '@/components/Breadcrumb'
 import { format_read_time } from '@/lib/read-time'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
-import './article.css'
+import '@/styles/article.css'
 
 interface PageProps {
-    params: Promise<{ account_id: string; article_id: string }>
+    params: Promise<{ account_id: string; posts_id: string }>
 }
 
 export const generateMetadata = async ({ params }: PageProps): Promise<Metadata> => {
-    const { account_id, article_id } = await params
-    const post_id = article_id
+    const { account_id, posts_id } = await params
+    const post_id = posts_id
     const supabase = createAdminClient()
 
     const { data: post } = await supabase
@@ -37,8 +37,8 @@ export const generateMetadata = async ({ params }: PageProps): Promise<Metadata>
 }
 
 const ArticlePage = async ({ params }: PageProps) => {
-    const { account_id, article_id } = await params
-    const post_id = article_id
+    const { account_id, posts_id } = await params
+    const post_id = posts_id
     const supabase = createAdminClient()
 
     const { data: post } = await supabase
@@ -78,7 +78,7 @@ const ArticlePage = async ({ params }: PageProps) => {
                 {canEdit && (
                     <div className='mt-4'>
                         <Link
-                            href={`/posts/edit?postId=${post.post_id}`}
+                            href={`/${account_id}/${post.post_id}/edit`}
                             className='inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:text-gray-900'
                         >
                             <SquarePen className='h-4 w-4' />

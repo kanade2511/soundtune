@@ -144,7 +144,7 @@ export async function updatePost(
         return account
     }
 
-    redirect(`/${account.accountId}/posts/${post_id}`)
+    redirect(`/${account.accountId}/${post_id}`)
 }
 
 export async function deletePost(

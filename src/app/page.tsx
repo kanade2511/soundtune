@@ -10,7 +10,7 @@ const Home = async () => {
         .filter(post => post.account_id)
         .map(post => ({
             key: post.post_id,
-            href: `/${post.account_id}/posts/${post.post_id}`,
+            href: `/${post.account_id}/${post.post_id}`,
             title: post.title,
             description: post.display_name ?? `@${post.account_id}`,
             readTime: format_read_time(post.read_time),

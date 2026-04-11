@@ -1,4 +1,4 @@
-import { ArrowLeft, Calendar, Clock } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, SquarePen } from 'lucide-react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,7 +7,7 @@ import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import Breadcrumb from '@/components/Breadcrumb'
 import { format_read_time } from '@/lib/read-time'
-import { createAdminClient } from '@/lib/supabase/server'
+import { createAdminClient, createClient } from '@/lib/supabase/server'
 import './article.css'
 
 interface PageProps {
@@ -42,7 +42,7 @@ const ArticlePage = async ({ params }: PageProps) => {
     const { data: post } = await supabase
         .from('posts')
         .select(
-            'article_id, title, content, created_at, read_time, thumbnail_url, approval_status, profiles!author_id (display_name, account_id)',
+            'article_id, title, content, created_at, read_time, thumbnail_url, approval_status, author_id, profiles!author_id (display_name, account_id)',
         )
         .eq('article_id', article_id)
         .single()
@@ -57,6 +57,12 @@ const ArticlePage = async ({ params }: PageProps) => {
         )
     }
 
+    const authClient = await createClient()
+    const {
+        data: { user },
+    } = await authClient.auth.getUser()
+    const canEdit = user?.id === post.author_id
+
     return (
         <div className='min-h-screen'>
             <article className='max-w-4xl py-2 sm:py-4'>
@@ -66,6 +72,18 @@ const ArticlePage = async ({ params }: PageProps) => {
                         { label: post.title },
                     ]}
                 />
+
+                {canEdit && (
+                    <div className='mt-4'>
+                        <Link
+                            href={`/posts/edit?articleId=${post.article_id}`}
+                            className='inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:text-gray-900'
+                        >
+                            <SquarePen className='h-4 w-4' />
+                            <span>この記事を編集</span>
+                        </Link>
+                    </div>
+                )}
 
                 <div className='mb-8'>
                     <h1 className='text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight'>

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useActionState, useCallback, useEffect, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { deletePost, updatePost } from '@/lib/actions/posts'
-import { compress_image_file } from '@/lib/image-compression'
+import { compress_image_file, POST_IMAGE_COMPRESSION_RULE } from '@/lib/image-compression'
 
 type ActionState = {
     error?: string
@@ -153,7 +153,7 @@ const EditPostForm = ({
         setUploadError(null)
 
         try {
-            const compressed_file = await compress_image_file(file)
+            const compressed_file = await compress_image_file(file, POST_IMAGE_COMPRESSION_RULE)
 
             const upload_form_data = new FormData()
             upload_form_data.append('articleId', articleId)

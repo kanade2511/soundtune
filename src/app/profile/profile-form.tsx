@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useActionState, useState } from 'react'
 import { useFormStatus } from 'react-dom'
 import { updateProfile } from '@/lib/actions/profile'
-import { compress_image_file } from '@/lib/image-compression'
+import { AVATAR_IMAGE_COMPRESSION_RULE, compress_image_file } from '@/lib/image-compression'
 
 type ActionState = {
     error?: string
@@ -85,7 +85,7 @@ const ProfileForm = ({ displayName, accountId, avatarUrl }: ProfileFormProps) =>
         setUploadError(null)
 
         try {
-            const compressed_file = await compress_image_file(file)
+            const compressed_file = await compress_image_file(file, AVATAR_IMAGE_COMPRESSION_RULE)
 
             const upload_form_data = new FormData()
             upload_form_data.append('file', compressed_file)

@@ -23,5 +23,11 @@
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "biomejs.biome"
+    },
+    "chat.tools.terminal.autoApprove": {
+        "/^git add -A && git commit -m \"fix: stabilize header hydration and unify image compression rules\" && git rev-parse --short HEAD$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
     }
 }
